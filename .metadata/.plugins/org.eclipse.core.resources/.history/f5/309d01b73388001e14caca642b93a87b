@@ -1,0 +1,46 @@
+package controller.member;
+
+import java.io.IOException;
+import java.util.logging.Logger;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import dao.member.MemberDao;
+import vo.member.MemberCreateDto;
+@WebServlet("/member/create")
+public class MemberCreateController extends HttpServlet{
+	private static final Logger log = Logger.getGlobal();
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		RequestDispatcher requestDispatcher =  req.getRequestDispatcher("/WEB-INF/view/member/create.jsp");
+		requestDispatcher.forward(req, resp);
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String id = req.getParameter("id");
+		String pw = req.getParameter("pw");
+		MemberCreateDto dto = new MemberCreateDto.Builder().memberId(id).memberPw(pw).build();
+		MemberDao memberDao = new MemberDao();
+		int validation = memberDao.createMember(dto);
+		
+		if (validation == 1) {
+			//200
+			log.info("회원가입성공");
+			resp.sendRedirect(req.getContextPath()+"/member/login");
+			return;
+		}else {
+			//400
+			log.info("회원가입실패");
+			resp.sendRedirect(req.getContextPath()+"/member/create");
+			return;
+		}
+	}
+}

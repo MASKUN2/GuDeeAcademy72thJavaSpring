@@ -1,0 +1,6 @@
+package vo.member;
+
+public class MemberCreateDto {
+	private String meberId;
+	private String memberPw;
+}

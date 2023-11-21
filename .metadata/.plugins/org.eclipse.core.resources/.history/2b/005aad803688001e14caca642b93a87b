@@ -1,0 +1,17 @@
+package validation;
+
+public class Validator {
+	
+	private Boolean isPass;
+	private String errorMsg;
+	
+	public Validator() {
+		this.isPass = false;
+		this.errorMsg = false;
+	}
+	
+	public  name() {
+		
+	}
+
+}

@@ -1,0 +1,10 @@
+package vo.member;
+
+import java.time.LocalDateTime;
+
+public class Member {
+	private int meberNo;
+	private String meberId;
+	private String memberPw;
+	private LocalDateTime createdate;
+}

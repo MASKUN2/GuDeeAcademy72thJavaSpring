@@ -1,0 +1,39 @@
+package controller.member;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import dao.member.MemberDao;
+import vo.member.MemberCreateDto;
+@WebServlet("/memeber/create")
+public class MemberCreateController extends HttpServlet{
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		req.getRequestDispatcher("WEB-INF/view/member/create.jsp");
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+		String id = req.getParameter("id");
+		String pw = req.getParameter("pw");
+		
+		MemberCreateDto dto = new MemberCreateDto.Builder().memberId(id).memberPw(pw).build();
+		
+		MemberDao memberDao = new MemberDao();
+		int validation = memberDao.createMember(dto);
+		if (validation == 1) {
+			//200
+			resp.sendRedirect("/memeber/login");
+		}else {
+			//400
+		}
+	}
+}

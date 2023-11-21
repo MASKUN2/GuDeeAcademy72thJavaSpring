@@ -1,0 +1,19 @@
+package validation;
+
+import vo.member.MemberCreateDto;
+
+public class Validator {
+	
+	private Boolean isPass;
+	private String validationLog;
+	
+	public Validator() {
+		this.isPass = null;
+		this.validationLog = null;
+	}
+	
+	public Validator validateMemberCreation(MemberCreateDto) {
+		
+	}
+
+}

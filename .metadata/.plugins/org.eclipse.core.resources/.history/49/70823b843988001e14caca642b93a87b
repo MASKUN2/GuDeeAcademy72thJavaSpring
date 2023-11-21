@@ -1,0 +1,7 @@
+package accessfilter;
+
+import javax.servlet.Filter;
+
+public class MemberOnlyFilter implements Filter{
+
+}

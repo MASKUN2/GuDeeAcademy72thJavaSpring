@@ -1,0 +1,17 @@
+package validation;
+
+public class ValidationReport {
+	
+	private Boolean isPass;
+	private String validationLog;
+	
+	public ValidationReport(Boolean isPass, String validationLog) {
+		super();
+		this.isPass = isPass;
+		this.validationLog = validationLog;
+	}
+	
+	
+	
+	
+}

@@ -1,0 +1,46 @@
+package vo.member;
+
+import java.time.LocalDateTime;
+
+public class Member {
+	private int memberNo;
+	private String meberId;
+	private String memberPw;
+	private LocalDateTime createdate;
+	
+	public int getMeberNo() {
+		return memberNo;
+	}
+	public void setMeberNo(int meberNo) {
+		this.memberNo = meberNo;
+	}
+	public String getMeberId() {
+		return memberId;
+	}
+	public void setMeberId(String meberId) {
+		this.memberId = meberId;
+	}
+	public String getMemberPw() {
+		return memberPw;
+	}
+	public void setMemberPw(String memberPw) {
+		this.memberPw = memberPw;
+	}
+	public LocalDateTime getCreatedate() {
+		return createdate;
+	}
+	public void setCreatedate(LocalDateTime createdate) {
+		this.createdate = createdate;
+	}
+	//builder
+	public static class builder{
+		private int meberNo;
+		private String meberId;
+		private String memberPw;
+		private LocalDateTime createdate;
+		
+		public builder mem() {
+			
+		}
+	}
+}

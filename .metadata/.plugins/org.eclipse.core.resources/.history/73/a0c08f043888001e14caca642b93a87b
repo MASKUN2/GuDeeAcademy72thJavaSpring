@@ -1,0 +1,9 @@
+package validation;
+
+public class ValidationReport {
+	
+	private Boolean isPass;
+	private String validationLog;
+	
+	
+}

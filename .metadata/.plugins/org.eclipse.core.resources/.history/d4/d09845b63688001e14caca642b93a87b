@@ -1,0 +1,17 @@
+package validation;
+
+public class Validator {
+	
+	private Boolean isPass;
+	private String validationLog;
+	
+	public Validator() {
+		this.isPass = null;
+		this.validationLog = null;
+	}
+	
+	public  name() {
+		
+	}
+
+}

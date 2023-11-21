@@ -1,0 +1,22 @@
+package validation;
+
+import java.util.regex.Pattern;
+
+import vo.member.MemberCreateDto;
+
+public class Validator {
+	private final String REGEX_MEMBER_ID = "^[a-zA-Z0-9]{3,20}$";
+	
+	public ValidationReport validateMemberCreation(MemberCreateDto dto) {
+		boolean isOkId = Pattern.matches(REGEX_MEMBER_ID, dto.getMemberId());
+		String validationLog = null;
+		if(isOkId) {
+			StringBuilder log = new StringBuilder();
+			String validationLog= log.append("ID는 3자이상 20자 이하 알파벳 또는 숫자만 가능합니다.").toString();
+			
+		}
+		return new ValidationReport(isOkId, validationLog);
+		
+	}
+
+}
