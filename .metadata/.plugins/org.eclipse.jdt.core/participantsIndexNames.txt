@@ -1,7 +1,0 @@
-INDEX VERSION 1.131
-C:\dev\gitwork2\GuDeeAcademy72thJavaSpring\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2838605809.index
-\231121Diary\src\main\java
-C:\dev\gitwork2\GuDeeAcademy72thJavaSpring\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\842467900.index
-\231121Diary\src\main\java
-C:\dev\gitwork2\GuDeeAcademy72thJavaSpring\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\1061470106.index
-\231121Diary\src\main\java

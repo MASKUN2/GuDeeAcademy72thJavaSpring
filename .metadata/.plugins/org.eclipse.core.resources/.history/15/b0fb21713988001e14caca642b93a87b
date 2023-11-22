@@ -1,5 +1,0 @@
-package accessfilter;
-
-public class MemberOnlyFilter {
-
-}
