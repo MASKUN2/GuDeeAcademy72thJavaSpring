@@ -15,6 +15,8 @@ import javax.sql.DataSource;
 
 import vo.member.Member;
 import vo.member.MemberCreateDto;
+import vo.member.MemberDeleteDto;
+import vo.member.MemberInfoDto;
 import vo.member.MemberLoginDto;
 
 public class MemberDao {
@@ -64,13 +66,13 @@ public class MemberDao {
 	// 로그인
 	public Member LoginMember(MemberLoginDto dto) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		String Sql = """
+		String sql = """
 				SELECT member_no memberNo, member_id memberId, createdate FROM MEMBER
 				 WHERE member_id = ? AND member_pw = ?""";
 		Member member = null;
 		try (
 			Connection conn = dataSource.getConnection();
-			PreparedStatement stmt = conn.prepareStatement(Sql);
+			PreparedStatement stmt = conn.prepareStatement(sql);
 		){
 			log.info(conn.toString());
 			stmt.setString(1, dto.getMemberId());
@@ -99,10 +101,10 @@ public class MemberDao {
 	}
 	
 	public boolean isUniqueId(MemberCreateDto dto) {
-		String Sql = "SELECT member_id memberId WHERE member_id = ?";
+		String sql = "SELECT member_id memberId WHERE member_id = ?";
 		try (
 			Connection conn = dataSource.getConnection();
-			PreparedStatement stmt = conn.prepareStatement(Sql);
+			PreparedStatement stmt = conn.prepareStatement(sql);
 		){
 			log.info(conn.toString());
 			stmt.setString(1, dto.getMemberId());
@@ -122,5 +124,58 @@ public class MemberDao {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	public int updateMemberPw(MemberInfoDto dto) {
+		int validateRow = 0;
+		String sql = """
+				UPDATE member SET member_pw = ? WHERE member_no = ? AND member_id = ? AND member_pw = ?""";
+		try (
+			Connection conn = dataSource.getConnection();
+			PreparedStatement stmt = conn.prepareStatement(sql);
+		){
+			conn.setAutoCommit(false);
+			log.info(conn.toString());
+			stmt.setString(1, dto.getMemberPwNew());
+			stmt.setInt(2, dto.getMemberNo());
+			stmt.setString(3, dto.getMemberId());
+			stmt.setString(4, dto.getMemberPwNow());
+			log.info(stmt.toString());
+			validateRow = stmt.executeUpdate();
+			if(validateRow == 1) {
+				conn.commit();
+			}else {
+				conn.rollback();
+			}
+		} catch (SQLException e) {
+			log.severe("SQL fail 롤백합니다."); // conn.close()는 commit 하지 않은 미완결 트랜잭션을 자동으로  Rollback시킴
+			e.printStackTrace();
+		}
+		return validateRow;
+	}
+	public int deleteMemberPw(MemberDeleteDto dto) {
+		int validateRow = 0;
+		String sql = """
+				DELETE FROM member WHERE member_no = ? AND member_id = ? AND member_pw = ?""";
+		try (
+			Connection conn = dataSource.getConnection();
+			PreparedStatement stmt = conn.prepareStatement(sql);
+		){
+			conn.setAutoCommit(false);
+			log.info(conn.toString());
+			stmt.setInt(1, dto.getMemberNo());
+			stmt.setString(2, dto.getMemberId());
+			stmt.setString(3, dto.getMemberPwNow());
+			log.info(stmt.toString());
+			validateRow = stmt.executeUpdate();
+			if(validateRow == 1) {
+				conn.commit();
+			}else {
+				conn.rollback();
+			}
+		} catch (SQLException e) {
+			log.severe("SQL fail 롤백합니다."); // conn.close()는 commit 하지 않은 미완결 트랜잭션을 자동으로  Rollback시킴
+			e.printStackTrace();
+		}
+		return validateRow;
 	}
 }

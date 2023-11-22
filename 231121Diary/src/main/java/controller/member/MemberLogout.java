@@ -26,7 +26,7 @@ public class MemberLogout extends HttpServlet{
 		log.info("세션 로그인정보를 삭제합니다. : "+session.getAttribute("member").toString());
 		session.removeAttribute("member");
 		String ReferUrl = req.getHeader("Referer");
-		resp.sendRedirect(ReferUrl);
+		resp.sendRedirect(req.getContextPath()+"/index.jsp");
 		return;
 	}
 }

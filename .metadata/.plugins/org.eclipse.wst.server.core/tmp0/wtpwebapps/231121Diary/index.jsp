@@ -16,6 +16,7 @@
 	<a href="<%=request.getContextPath()%>/member/login">/member/login</a><br>
 	<a href="<%=request.getContextPath()%>/member/logout">/member/logout</a><br>
 	<a href="<%=request.getContextPath()%>/member/info">/member/info</a><br>
+	<a href="<%=request.getContextPath()%>/member/info">/member/delete</a><br>
 	</div>	
 
 </body>

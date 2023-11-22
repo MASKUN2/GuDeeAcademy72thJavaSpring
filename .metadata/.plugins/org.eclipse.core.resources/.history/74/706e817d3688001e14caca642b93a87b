@@ -1,9 +1,0 @@
-package validation;
-
-public class Validator {
-	
-	public  name() {
-		
-	}
-
-}
