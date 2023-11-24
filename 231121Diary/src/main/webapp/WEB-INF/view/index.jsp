@@ -1,6 +1,7 @@
 <%@page import="vo.member.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,19 +12,25 @@
     .calendar-day {
       border: 1px solid #ddd;
       padding: 10px;
-      height: 150px; /* 각 셀의 높이 조절 */
+      height: 160px; /* 각 셀의 높이 조절 */
+      font-size: 18px; /* 원하는 텍스트 크기로 조절 */
+	  font-weight: bold; /* 텍스트를 굵게 만듦 */
     }
     .calendar-saturday {
       border: 1px solid #ddd;
       padding: 10px;
-      height: 150px; /* 각 셀의 높이 조절 */
+      height: 160px; /* 각 셀의 높이 조절 */
       color: #0000ff;
+      font-size: 18px; /* 원하는 텍스트 크기로 조절 */
+	  font-weight: bold; /* 텍스트를 굵게 만듦 */
     }
     .calendar-sunday {
       border: 1px solid #ddd;
       padding: 10px;
-      height: 150px; /* 각 셀의 높이 조절 */
+      height: 160px; /* 각 셀의 높이 조절 */
       color: #ff0000;
+      font-size: 18px; /* 원하는 텍스트 크기로 조절 */
+	  font-weight: bold; /* 텍스트를 굵게 만듦 */
     }
     .calendar-dayofweek {
       border: 1px solid #ddd;
@@ -36,14 +43,43 @@
 </head>
 <body>
 <div class="container my-5">
-	<H1>${member.memberId} 어서오세요^^</H1>
 	<div>
-		<a href="${pageContext.request.contextPath}/member/create">/member/create</a><br>
-		<a href="${pageContext.request.contextPath}/member/login">/member/login</a><br>
-		<a href="${pageContext.request.contextPath}/member/logout">/member/logout</a><br>
-		<a href="${pageContext.request.contextPath}/member/info">/member/info</a><br>
-		<a href="${pageContext.request.contextPath}/member/delete">/member/delete</a><br>
+			<form class="form-control" action="<%=request.getContextPath()%>/member/login" method="post">
+		<div class="my-3">
+			<input id="id" name="id" type="text" placeholder="아이디를 입력하세요" value="admin">
+		</div>
+		<div class="my-3">
+			<input id="pw" name="pw" type="password" placeholder="비밀번호를 입력하세요" value="1234">
+		</div>
+		<div class="my-3">
+			<button id="btn">빠른 test로그인</button>
+		</div>
+	</form>
+	</div>
+	<H1>${member.memberId} 어서오세요^^</H1>
+	<div class="row">
+	<div class="col border d-grid">
+		<button type="button" class="btn btn-light btn-block" data-bs-toggle="collapse" data-bs-target="#demo">NOTICE</button>
+	</div>
+	<div class="col">
+  		<div align="right">
+  		</div>
+	 		<div id="demo" class="collapse border">
+	   			<h2>NOTICE</h2>
+	   			<table class="table">
+	   				<tr>
+	   					<td>
+	   					</td>
+	   					<td>
+	   					</td>
+	   					<td>
+	   					</td>
+	   				</tr>
+	   			
+	   			</table>
+	 		</div>
 	</div >
+	</div>
 	<div class="row my-5">
 		<div class="col">
 		</div>
@@ -92,11 +128,17 @@
 				<div class="${colorOfday}">
 					${i}
 					<c:if test="${member != null}">
-						<a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule?date=${requestYear}-${requestMonth}-${i}">✏️</a>
+						<a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule?date=${requestYear}-${requestMonth}-${i}"><span style="font-size: 12px;">✏️</span></a>
 					</c:if>
-					<br>
-					<div class="mt-2">
-						<span style="color: black;">${memoList[i]}</span>
+					<div>
+						<c:forEach var="j" begin="0" end="2">
+							<span style="color: black; font-weight: normal; font-size: 14px;">${memoList[i][j]}</span><br>
+							<c:if test="${j==2 && memoList[i][j+1] != null }">
+								<span class="badge rounded-pill bg-secondary" style="font-size: 8px;">
+									<c:out value="${fn:length(memoList[i])-3}+"></c:out>
+								</span>
+							</c:if>
+						</c:forEach>
 					</div>
 				</div>
 			<c:set var="colorOfday" value="col calendar-day"/>

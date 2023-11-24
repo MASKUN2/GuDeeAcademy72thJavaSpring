@@ -1,9 +1,11 @@
 package controller.schedule;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -16,16 +18,22 @@ import dao.schedule.ScheduleDao;
 import vo.member.Member;
 @WebServlet("/schedule")
 public class ScheduleController extends HttpServlet{
+	private static final Logger log = Logger.getGlobal();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String paramDate = req.getParameter("date");
 		Member member = (Member) req.getSession().getAttribute("member");
+		String[] yearMonth = paramDate.split("-");
+		log.info(yearMonth[0]);
+		log.info(yearMonth[1]);
 		
 		ScheduleDao dao = new ScheduleDao();
 		Map<Integer, String> map = dao.retrieveDateSchedule(member.getMemberId(), paramDate);
 		req.setAttribute("map", map);
 		req.setAttribute("date", paramDate);
+		req.setAttribute("requestYear", yearMonth[0]);
+		req.setAttribute("requestMonth", yearMonth[1]);
 		
 		RequestDispatcher requestDispatcher = req.getRequestDispatcher("/WEB-INF/view/schedule/date.jsp");
 		requestDispatcher.forward(req, resp);
@@ -49,7 +57,8 @@ public class ScheduleController extends HttpServlet{
 		
 		switch (paramControl) {
 			case "add" : {
-				String newMemo = req.getParameter("newMemo");
+				String emoticon = req.getParameter("emoticon");
+				String newMemo = emoticon + req.getParameter("newMemo");
 				dao.addSchedule(memberId,newMemo, paramDate);
 				break;
 			}

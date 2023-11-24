@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -15,9 +16,9 @@ import dao.MyDataSource;
 public class ScheduleDao {
 	private final Logger log = Logger.getGlobal();
 	
-	public List<String> retrieveMonthSchedule (String memberId, String yearMonth) {
+	public ArrayList<String[]> retrieveMonthSchedule (String memberId, String yearMonth) {
 		String Sql = """
-				SELECT CAST(DATE_FORMAT(schedule_date,'%d') AS UNSIGNED) 'date' ,COUNT(*) count, GROUP_CONCAT(substr(schedule_memo,1, 5) SEPARATOR '<br>') memo FROM `schedule` 
+				SELECT CAST(DATE_FORMAT(schedule_date,'%d') AS UNSIGNED) 'date' ,COUNT(*) count, GROUP_CONCAT(substr(schedule_memo,1, 10) ORDER BY createdate SEPARATOR '<br>') memo FROM `schedule` 
 				WHERE member_id = ? AND DATE_FORMAT(schedule_date, '%Y-%m') = ? 
 				GROUP BY schedule_date ORDER BY schedule_date 
 				""";
@@ -30,17 +31,24 @@ public class ScheduleDao {
 			stmt.setString(2, yearMonth);
 			log.info(stmt.toString());
 			ResultSet rs = stmt.executeQuery();
-			ArrayList<String> list = new ArrayList<>(32);
+			ArrayList<String[]> list = new ArrayList<>(0);
 			for(int i = 0; i < 32;i++) {
-				list.add("");
+				list.add(null);
 			}
 			while(rs.next()) {
-				list.add(rs.getInt("date"), rs.getString("memo"));
+				log.info(rs.getString("memo"));
+				String rawMemoConcated = rs.getString("memo");
+				String[] arrMemo = rawMemoConcated.split("<br>");
+				for (String s : arrMemo) {
+					log.info(s);
+				}
+				list.set(rs.getInt("date"), arrMemo);
 			}
+			log.info("list size(): "+list.size());
 			return list;
 
 		} catch (SQLException e) {
-			log.info("SQL fail 롤백합니다."); // conn.close()는 commit 하지 않은 미완결 트랜잭션을 자동으로  Rollback시킴
+			log.severe("SQL fail 롤백합니다."); // conn.close()는 commit 하지 않은 미완결 트랜잭션을 자동으로  Rollback시킴
 			e.printStackTrace();
 			return null;
 		}
@@ -51,7 +59,7 @@ public class ScheduleDao {
 		String Sql = """
 				SELECT schedule_no scheduleNo, schedule_memo memo FROM `schedule` 
 				 WHERE member_id = ? AND schedule_date = STR_TO_DATE(?,'%Y-%m-%d') 
-				 ORDER BY schedule_no """;
+				 ORDER BY createdate """;
 		try (
 			Connection conn = MyDataSource.getConn();
 			PreparedStatement stmt = conn.prepareStatement(Sql);
@@ -61,7 +69,7 @@ public class ScheduleDao {
 			stmt.setString(2, paramDate);
 			log.info(stmt.toString());
 			ResultSet rs = stmt.executeQuery();
-			Map<Integer, String> map = new HashMap<>();
+			Map<Integer, String> map = new LinkedHashMap<>();
 			while(rs.next()) {
 				map.put(rs.getInt("scheduleNo"), rs.getString("memo"));
 			}

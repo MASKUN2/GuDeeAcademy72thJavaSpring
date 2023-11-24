@@ -16,6 +16,10 @@ public class Main {
 		
 		String date	= requestDate.format(DateTimeFormatter.ofPattern("Y-M"));
 		System.out.println(date);
+		
+		String str = "2023-1-1";
+		LocalDate datet = LocalDate.parse(str);
+		System.out.println(datet);
 	}
 
 }

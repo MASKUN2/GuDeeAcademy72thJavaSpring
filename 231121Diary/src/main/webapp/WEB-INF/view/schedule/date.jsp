@@ -13,7 +13,12 @@
 <div class="container my-5">
 	<div align="center">
 		<h3> ${date} SCHEDULE</h3>
-		<a class="btn btn-light" href="${pageContext.request.contextPath}/index"> CALENDAR</a>
+		<form action="${pageContext.request.contextPath}/index" method="post">
+			<input name="control" value="request" hidden="true" readonly="readonly">
+			<input name="requestYear" value="${requestYear}" hidden="true" readonly="readonly">
+			<input name="requestMonth" value="${requestMonth}" hidden="true" readonly="readonly">
+			<button class="btn btn-light" type="submit">CALENDAR </button>
+		</form>
 	</div>
 	<table class="table table-strigh">
 		<tr>
@@ -53,7 +58,21 @@
 			  		 <input name="control" value="add" hidden="true" readonly="readonly">
 				</td>
 				<td>
-			  		 <input name="newMemo" type="text" class="form-control" placeholder="일정추가" >
+				  	<div class="row">
+				  		<div class="col">
+				  			 <input name="newMemo" type="text" class="form-control" placeholder="일정추가" >
+				  		</div>
+				  		<div class="col col-1">
+			  				<select class="form-select form-select-sm mt-1" name="emoticon">
+								<option value="😊">😊</option>
+								<option value="💎">💎</option>
+								<option value="📰">📰</option>
+								<option value="🎁">🎁</option>
+								<option value="👟">👟</option>
+								<option value="🎸">🎸</option>
+							</select>
+				  		</div>
+				  	</div>
 				</td>
 				<td>
 				  	<input class="btn btn-light" type="submit" value="➕">

@@ -1,4 +1,4 @@
-package controller.member;
+package controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 import dao.schedule.ScheduleDao;
 import vo.member.Member;
 @WebServlet("/index")
-public class MemberHomeController extends HttpServlet{
+public class IndexController extends HttpServlet{
 	private static final Logger log = Logger.getGlobal();
 	
 	@Override
@@ -38,7 +38,7 @@ public class MemberHomeController extends HttpServlet{
 		dayOfWeek = requestDate.getDayOfWeek().getValue();
 		
 		try {
-			List<String> memoList = null;
+			List<String[]> memoList = null;
 			Member member = (Member) req.getSession().getAttribute("member");
 			ScheduleDao dao = new ScheduleDao();
 			memoList = dao.retrieveMonthSchedule(member.getMemberId(),requestDate.format(DateTimeFormatter.ofPattern("Y-M")));
@@ -53,7 +53,7 @@ public class MemberHomeController extends HttpServlet{
 		req.setAttribute("lengthOfMonth", lengthOfMonth);
 		req.setAttribute("dayOfWeek", dayOfWeek);
 		
-		RequestDispatcher requestDispatcher = req.getRequestDispatcher("/index.jsp");
+		RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/view/index.jsp");
 		requestDispatcher.forward(req, resp);
 	}
 	
@@ -75,8 +75,11 @@ public class MemberHomeController extends HttpServlet{
 			requestDate = requestDate.minusMonths(1L);
 			requestYear = requestDate.getYear();
 			requestMonth = requestDate.getMonthValue();
-		}else{
+		}else if(paramControl.equals("month+1")){
 			requestDate = requestDate.plusMonths(1L);
+			requestYear = requestDate.getYear();
+			requestMonth = requestDate.getMonthValue();
+		}else {
 			requestYear = requestDate.getYear();
 			requestMonth = requestDate.getMonthValue();
 		}
@@ -85,7 +88,7 @@ public class MemberHomeController extends HttpServlet{
 		dayOfWeek = requestDate.getDayOfWeek().getValue();
 		
 		try {
-			List<String> memoList = null;
+			List<String[]> memoList = null;
 			Member member = (Member) req.getSession().getAttribute("member");
 			ScheduleDao dao = new ScheduleDao();
 			memoList = dao.retrieveMonthSchedule(member.getMemberId(),requestDate.format(DateTimeFormatter.ofPattern("Y-MM")));
@@ -100,7 +103,7 @@ public class MemberHomeController extends HttpServlet{
 		req.setAttribute("lengthOfMonth", lengthOfMonth);
 		req.setAttribute("dayOfWeek", dayOfWeek);
 		
-		RequestDispatcher requestDispatcher = req.getRequestDispatcher("/index.jsp");
+		RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/view/index.jsp");
 		requestDispatcher.forward(req, resp);
 	}
 	
