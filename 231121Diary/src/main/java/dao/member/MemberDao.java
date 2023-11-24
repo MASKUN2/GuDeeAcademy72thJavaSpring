@@ -13,6 +13,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
+import dao.MyDataSource;
 import vo.member.Member;
 import vo.member.MemberCreateDto;
 import vo.member.MemberDeleteDto;
@@ -21,27 +22,12 @@ import vo.member.MemberLoginDto;
 
 public class MemberDao {
 	private static final Logger log = Logger.getGlobal();
-	private DataSource dataSource;
-	//생성자
-	public MemberDao() {
-		Context context = null;
-		DataSource dataSource = null;
-		try {
-			context = new InitialContext();
-			dataSource = (DataSource)context.lookup("java:comp/env/jdbc/diary");
-			this.dataSource = dataSource;
-		} catch (NamingException e) {
-			log.severe("dataSource 초기화에 실패했습니다.");
-			e.printStackTrace();
-			this.dataSource = null;
-		}
-	}
 	//회원가입
 	public int createMember(MemberCreateDto dto) {
 		String Sql = "INSERT INTO member (member_id, member_pw) VALUES(?, ?)";
 		int validateRow = 0;
 		try (
-			Connection conn = dataSource.getConnection();
+			Connection conn = MyDataSource.getConn();
 			PreparedStatement stmt = conn.prepareStatement(Sql);
 		){
 			conn.setAutoCommit(false);
@@ -71,7 +57,7 @@ public class MemberDao {
 				 WHERE member_id = ? AND member_pw = ?""";
 		Member member = null;
 		try (
-			Connection conn = dataSource.getConnection();
+			Connection conn = MyDataSource.getConn();
 			PreparedStatement stmt = conn.prepareStatement(sql);
 		){
 			log.info(conn.toString());
@@ -103,7 +89,7 @@ public class MemberDao {
 	public boolean isUniqueId(MemberCreateDto dto) {
 		String sql = "SELECT member_id memberId WHERE member_id = ?";
 		try (
-			Connection conn = dataSource.getConnection();
+			Connection conn = MyDataSource.getConn();
 			PreparedStatement stmt = conn.prepareStatement(sql);
 		){
 			log.info(conn.toString());
@@ -130,7 +116,7 @@ public class MemberDao {
 		String sql = """
 				UPDATE member SET member_pw = ? WHERE member_no = ? AND member_id = ? AND member_pw = ?""";
 		try (
-			Connection conn = dataSource.getConnection();
+			Connection conn = MyDataSource.getConn();
 			PreparedStatement stmt = conn.prepareStatement(sql);
 		){
 			conn.setAutoCommit(false);
@@ -157,7 +143,7 @@ public class MemberDao {
 		String sql = """
 				DELETE FROM member WHERE member_no = ? AND member_id = ? AND member_pw = ?""";
 		try (
-			Connection conn = dataSource.getConnection();
+			Connection conn = MyDataSource.getConn();
 			PreparedStatement stmt = conn.prepareStatement(sql);
 		){
 			conn.setAutoCommit(false);

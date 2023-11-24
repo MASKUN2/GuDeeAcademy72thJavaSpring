@@ -1,6 +1,7 @@
 package test231122;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
 
@@ -13,10 +14,8 @@ public class Main {
 		
 		System.out.println(requestDate);
 		
-		System.out.println(requestDate.getDayOfWeek());
-		
-		
-
+		String date	= requestDate.format(DateTimeFormatter.ofPattern("Y-M"));
+		System.out.println(date);
 	}
 
 }

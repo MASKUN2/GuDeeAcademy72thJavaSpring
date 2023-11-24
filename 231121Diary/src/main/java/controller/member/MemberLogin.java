@@ -41,7 +41,7 @@ public class MemberLogin extends HttpServlet{
 			HttpSession session = req.getSession();
 			session.setAttribute("member", member);
 			log.info("세션에 로그인정보가 저장되었습니다. : "+session.getAttribute("member").toString());
-			resp.sendRedirect(req.getContextPath()+"/index.jsp");
+			resp.sendRedirect(req.getContextPath()+"/index");
 			return;
 		}else {
 			//400

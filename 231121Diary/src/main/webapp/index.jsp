@@ -38,19 +38,11 @@
 <div class="container my-5">
 	<H1>${member.memberId} 어서오세요^^</H1>
 	<div>
-		<br>requestYear ${requestYear}
-		<br>requestMonth ${requestMonth}
-		<br>lengthOfMonth ${lengthOfMonth}
-		<br>dayOfWeek ${dayOfWeek}
-		<br>test ${test}
-		<br>cnt ${cnt}
-	</div>
-	<div>
 		<a href="${pageContext.request.contextPath}/member/create">/member/create</a><br>
 		<a href="${pageContext.request.contextPath}/member/login">/member/login</a><br>
 		<a href="${pageContext.request.contextPath}/member/logout">/member/logout</a><br>
 		<a href="${pageContext.request.contextPath}/member/info">/member/info</a><br>
-		<a href="${pageContext.request.contextPath}/member/info">/member/delete</a><br>
+		<a href="${pageContext.request.contextPath}/member/delete">/member/delete</a><br>
 	</div >
 	<div class="row my-5">
 		<div class="col">
@@ -58,35 +50,20 @@
 		<div class="col md-10">
 			<h1>${requestYear}.${requestMonth} CALENDAR</h1>
 		</div>
-		<div class="col"></div>
-	</div>
-	<div class="row mb-2 p-3">
-	  <form method="get">
-    <label for="year">Year:</label>
-    <select name="requestYear" >
-      <option value="2023">2023</option>
-      <option value="2024">2024</option>
-      <option value="2025">2025</option>
-    </select>
-
-    <label for="month">Month:</label>
-    <select name="requestMonth">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-      <option value="11">11</option>
-      <option value="12">12</option>
-    </select>
-
-    <input class="btn btn-light" type="submit" value="go">
-  </form>
+		<div class="col" align="right">
+	  	<form method="post">
+	  		<input name="requestYear" value="${requestYear}" hidden="true" readonly="readonly">
+	  		<input name="requestMonth" value="${requestMonth}" hidden="true" readonly="readonly">
+	  		<input name="control" value="month-1" hidden="true" readonly="readonly">
+	  		<input class="btn btn-light" type="submit" value="Prev.">
+	  	</form>
+	  	<form method="post">
+	  		<input name="requestYear" value="${requestYear}" hidden="true" readonly="readonly">
+	  		<input name="requestMonth" value="${requestMonth}" hidden="true" readonly="readonly">
+	  		<input name="control" value="month+1" hidden="true" readonly="readonly">
+	  		<input class="btn btn-light" type="submit" value="Next">
+	  	</form>
+	  	</div>
 	</div>
 	<c:set var="cnt" value="0"/>
 	<c:set var="colorOfday" value="col calendar-day"/>
@@ -112,7 +89,16 @@
 	    	<c:if test="${cnt%7 == 0 }">
 	    		<c:set var="colorOfday" value="col calendar-sunday"/>
 	    	</c:if>
-			<div class="${colorOfday}">${i}</div>
+				<div class="${colorOfday}">
+					${i}
+					<c:if test="${member != null}">
+						<a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule?date=${requestYear}-${requestMonth}-${i}">✏️</a>
+					</c:if>
+					<br>
+					<div class="mt-2">
+						<span style="color: black;">${memoList[i]}</span>
+					</div>
+				</div>
 			<c:set var="colorOfday" value="col calendar-day"/>
 	    	<c:if test="${cnt%7 == 0 }">
 	    		</div> <div class="row">
