@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dao.notice.NoticeDao;
 import dao.schedule.ScheduleDao;
 import vo.member.Member;
 @WebServlet("/index")
@@ -30,7 +32,16 @@ public class IndexController extends HttpServlet{
 		int lengthOfMonth;
 		int dayOfWeek;
 		
-		requestDate = LocalDate.now().withDayOfMonth(1);
+		//when have requested Year Month not now;
+		try {
+			int paramRequestYear = (int) req.getAttribute("requestYear");
+			int paramRequestMonth = (int) req.getAttribute("requestMonth");
+			requestDate = LocalDate.of(paramRequestYear, paramRequestMonth, 1);
+		}catch (Exception e) {
+			requestDate = LocalDate.now().withDayOfMonth(1);
+			log.info("post로 받은 요청날짜 getting에 fail, then going on with NOW date;");
+		}
+		
 		requestMonth = requestDate.getMonthValue();
 		requestYear = requestDate.getYear();
 		
@@ -41,17 +52,23 @@ public class IndexController extends HttpServlet{
 			List<String[]> memoList = null;
 			Member member = (Member) req.getSession().getAttribute("member");
 			ScheduleDao dao = new ScheduleDao();
-			memoList = dao.retrieveMonthSchedule(member.getMemberId(),requestDate.format(DateTimeFormatter.ofPattern("Y-M")));
+			memoList = dao.retrieveMonthSchedule(member.getMemberId(),requestDate.format(DateTimeFormatter.ofPattern("Y-MM")));
 			req.setAttribute("memoList", memoList);
 		} catch (Exception e) {
 			log.info("로그인정보가 없습니다.");
 			e.printStackTrace();
 		}
 		
+		NoticeDao noticeDao = new NoticeDao();
+		
+		List<Map<String, Object>> noticeList= noticeDao.getNoticeList();
+		
+		
 		req.setAttribute("requestYear", requestYear);
 		req.setAttribute("requestMonth", requestMonth);
 		req.setAttribute("lengthOfMonth", lengthOfMonth);
 		req.setAttribute("dayOfWeek", dayOfWeek);
+		req.setAttribute("noticeList", noticeList);
 		
 		RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/view/index.jsp");
 		requestDispatcher.forward(req, resp);
@@ -66,8 +83,6 @@ public class IndexController extends HttpServlet{
 		LocalDate requestDate;
 		int requestYear ;
 		int requestMonth ;
-		int lengthOfMonth;
-		int dayOfWeek;
 
 		requestDate = LocalDate.of(Integer.parseInt(paramRequestYear), Integer.parseInt(paramRequestMonth), 1);
 		
@@ -84,32 +99,12 @@ public class IndexController extends HttpServlet{
 			requestMonth = requestDate.getMonthValue();
 		}
 		
-		lengthOfMonth = requestDate.lengthOfMonth();
-		dayOfWeek = requestDate.getDayOfWeek().getValue();
-		
-		try {
-			List<String[]> memoList = null;
-			Member member = (Member) req.getSession().getAttribute("member");
-			ScheduleDao dao = new ScheduleDao();
-			memoList = dao.retrieveMonthSchedule(member.getMemberId(),requestDate.format(DateTimeFormatter.ofPattern("Y-MM")));
-			req.setAttribute("memoList", memoList);
-		} catch (Exception e) {
-			log.info("로그인정보가 없습니다.");
-			e.printStackTrace();
-		}
-		
 		req.setAttribute("requestYear", requestYear);
 		req.setAttribute("requestMonth", requestMonth);
-		req.setAttribute("lengthOfMonth", lengthOfMonth);
-		req.setAttribute("dayOfWeek", dayOfWeek);
 		
-		RequestDispatcher requestDispatcher = req.getRequestDispatcher("WEB-INF/view/index.jsp");
-		requestDispatcher.forward(req, resp);
+		doGet(req, resp);
 	}
-	
-	public void getMemoList() {
-		
-	}
+
 }
 
 

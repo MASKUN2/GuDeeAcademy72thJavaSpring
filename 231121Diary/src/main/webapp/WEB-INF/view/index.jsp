@@ -64,18 +64,19 @@
 	<div class="col">
   		<div align="right">
   		</div>
-	 		<div id="demo" class="collapse border">
+	 		<div id="demo" class="collapse border" align="center">
 	   			<h2>NOTICE</h2>
-	   			<table class="table">
+	   			<table class="table p-3">
+	   				<c:forEach var="map" items="${noticeList}">
 	   				<tr>
 	   					<td>
+	   						${map['noticeNo']}
 	   					</td>
 	   					<td>
-	   					</td>
-	   					<td>
+	   						<a href="./notice?noticeNo=${map['noticeNo']}" style="text-decoration: none; color: black;">${map['noticeTitle']}</a>
 	   					</td>
 	   				</tr>
-	   			
+	   				</c:forEach>
 	   			</table>
 	 		</div>
 	</div >

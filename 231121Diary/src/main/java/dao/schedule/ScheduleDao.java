@@ -36,12 +36,8 @@ public class ScheduleDao {
 				list.add(null);
 			}
 			while(rs.next()) {
-				log.info(rs.getString("memo"));
 				String rawMemoConcated = rs.getString("memo");
 				String[] arrMemo = rawMemoConcated.split("<br>");
-				for (String s : arrMemo) {
-					log.info(s);
-				}
 				list.set(rs.getInt("date"), arrMemo);
 			}
 			log.info("list size(): "+list.size());
