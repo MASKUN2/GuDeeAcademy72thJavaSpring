@@ -34,9 +34,12 @@
 		<c:forEach var="map" items="${commentList}">
 			<tr>
 			 	<td>
-			 		${map['commentContent']}
-			 		<br>
-			 		by: ${map['author']} 
+			 		<div class="m-3">
+			 			${map['commentContent']}
+			 		</div>
+			 		<div align="right" class="mx-3" >
+			 			<span class="btn btn-secondary btn-sm"> by: ${map['author']}</span> 
+			 		</div>
 			 	</td>
 			</tr>
 		</c:forEach>

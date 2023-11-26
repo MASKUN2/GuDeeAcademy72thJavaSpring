@@ -12,41 +12,41 @@
     .calendar-day {
       border: 1px solid #ddd;
       padding: 10px;
-      height: 160px; /* 각 셀의 높이 조절 */
-      font-size: 18px; /* 원하는 텍스트 크기로 조절 */
-	  font-weight: bold; /* 텍스트를 굵게 만듦 */
+      height: 160px; 
+      font-size: 18px; 
+	  font-weight: bold;
     }
     .calendar-saturday {
       border: 1px solid #ddd;
       padding: 10px;
-      height: 160px; /* 각 셀의 높이 조절 */
+      height: 160px;
       color: #0000ff;
-      font-size: 18px; /* 원하는 텍스트 크기로 조절 */
-	  font-weight: bold; /* 텍스트를 굵게 만듦 */
+      font-size: 18px; 
+	  font-weight: bold; 
     }
     .calendar-sunday {
       border: 1px solid #ddd;
       padding: 10px;
-      height: 160px; /* 각 셀의 높이 조절 */
+      height: 160px; 
       color: #ff0000;
-      font-size: 18px; /* 원하는 텍스트 크기로 조절 */
-	  font-weight: bold; /* 텍스트를 굵게 만듦 */
+      font-size: 18px;
+	  font-weight: bold;
     }
     .calendar-dayofweek {
       border: 1px solid #ddd;
       padding: 10px;
-      height: 60px; /* 각 셀의 높이 조절 */
+      height: 60px;
     }
     
   </style>
-<title>Insert title here</title>
+<title>${pageContext.request.servletPath}</title>
 </head>
 <body>
 <div class="container my-5">
 	<div>
-			<form class="form-control" action="<%=request.getContextPath()%>/member/login" method="post">
+			<form class="form-control" action="${pageContext.request.contextPath}/member/login" method="post">
 		<div class="my-3">
-			<input id="id" name="id" type="text" placeholder="아이디를 입력하세요" value="admin">
+			<input id="id" name="id" type="text" placeholder="아이디를 입력하세요" value="goodee">
 		</div>
 		<div class="my-3">
 			<input id="pw" name="pw" type="password" placeholder="비밀번호를 입력하세요" value="1234">
@@ -56,9 +56,11 @@
 		</div>
 	</form>
 	</div>
-	<H1>${member.memberId} 어서오세요^^</H1>
+	<div align="center">
+		<H1>${member.memberId}, welcome</H1>
+	</div>
 	<div class="row">
-	<div class="col border d-grid">
+	<div class="col d-grid">
 		<button type="button" class="btn btn-light btn-block" data-bs-toggle="collapse" data-bs-target="#demo">NOTICE</button>
 	</div>
 	<div class="col">
@@ -154,5 +156,5 @@
 	</div>
 </div>	
 </body>
-<script type="text/javascript" src="<%=request.getContextPath()%>/js/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.7.1.min.js"></script>
 </html>

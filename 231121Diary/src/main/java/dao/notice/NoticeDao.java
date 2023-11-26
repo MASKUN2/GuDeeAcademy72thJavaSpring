@@ -44,7 +44,7 @@ public class NoticeDao {
 		String SqlNotice = """
 				SELECT notice_no noticeNo, author, notice_title noticeTitle, notice_content noticeContent FROM notice WHERE notice_no = ?""";
 		String SqlComment = """
-				SELECT comment_no commentNo, author, comement_content commentContent FROM notice_comment WHERE notice_no = ?""";
+				SELECT comment_no commentNo, author, comment_content commentContent FROM notice_comment WHERE notice_no = ?""";
 		try (
 			Connection conn = MyDataSource.getConn();
 			PreparedStatement stmtNotice = conn.prepareStatement(SqlNotice);

@@ -54,23 +54,22 @@
 		</c:forEach>
 		<tr>
 		  	<form action="${pageContext.request.contextPath}/schedule?date=${date}" method="post">
-				<td>
-			  		 <input name="control" value="add" hidden="true" readonly="readonly">
+				<td width="80 px">
+			  		<input name="control" value="add" hidden="true" readonly="readonly">
+	  				<select class="form-select form-select-sm mt-1" name="emoticon">
+						<option value=" "> </option>
+						<option value="😊">😊</option>
+						<option value="💎">💎</option>
+						<option value="📰">📰</option>
+						<option value="🎁">🎁</option>
+						<option value="👟">👟</option>
+						<option value="🎸">🎸</option>
+					</select>
 				</td>
 				<td>
 				  	<div class="row">
-				  		<div class="col">
+				  		<div class="col-12">
 				  			 <input name="newMemo" type="text" class="form-control" placeholder="일정추가" >
-				  		</div>
-				  		<div class="col col-1">
-			  				<select class="form-select form-select-sm mt-1" name="emoticon">
-								<option value="😊">😊</option>
-								<option value="💎">💎</option>
-								<option value="📰">📰</option>
-								<option value="🎁">🎁</option>
-								<option value="👟">👟</option>
-								<option value="🎸">🎸</option>
-							</select>
 				  		</div>
 				  	</div>
 				</td>
