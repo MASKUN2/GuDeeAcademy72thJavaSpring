@@ -1,21 +1,21 @@
 package api;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.*;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 /**해당년월의 공휴일을 조회하는 공공 APi의 요청클래스입니다.
  * https://www.data.go.kr/data/15012690/openapi.do
  * */
@@ -43,19 +43,42 @@ public class ApiExplorer {
         }
         rd.close();
         conn.disconnect();
-        String rawXml = sb.toString();
-        System.out.println(rawXml);
+        String xmlString = sb.toString();
         
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = dbf.newDocumentBuilder(); 
+        XmlMapper xmlMapper = new XmlMapper();
+        JsonNode rootNode = xmlMapper.readTree(xmlString.getBytes());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        // Get the "item" array from the "items" object
+        JsonNode itemsNode = rootNode.path("body").path("items").path("item");
+        System.out.println(rootNode);
+        System.out.println(itemsNode);
+        System.out.println(itemsNode.isArray());
+        System.out.println("---");
+        List<ApiVo> list = new ArrayList<>();
+        if(itemsNode.isArray()) {
+		    for(JsonNode n : itemsNode) {
+		    	ApiVo v = new ApiVo();
+		    	System.out.println(n.toString());
+		    	v = objectMapper.readValue(n.toString(), ApiVo.class);
+		    	list.add(v);
+		    }
+		    for(ApiVo v : list) {
+	        	System.out.println(v.toString());
+	        }
+        }else if(!itemsNode.isEmpty()){
+        	ApiVo v = new ApiVo();
+        	v = objectMapper.readValue(itemsNode.toString(), ApiVo.class);
+        	System.out.println(v.toString());
+		}
         
-        Document xmlDoc = builder.parse(new InputSource(new StringReader(rawXml)));
+
         
-        Element root = xmlDoc.getDocumentElement();
-        NodeList items = root.getElementsByTagName("items");
-        Element firstElement = (Element)items.item(0);
-        System.out.println("??");
-        System.out.println(firstElement.getAttribute("dateName"));
+        
+        
+        
+        
         
     }
     
