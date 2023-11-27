@@ -46,7 +46,7 @@ public class MemberLogin extends HttpServlet{
 		}else {
 			//400
 			log.info("로그인실패");
-			resp.sendRedirect(req.getContextPath()+"/member/login");
+			resp.sendRedirect(req.getContextPath()+"/index");
 			return;
 		}
 	}

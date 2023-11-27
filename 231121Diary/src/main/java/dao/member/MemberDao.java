@@ -87,7 +87,7 @@ public class MemberDao {
 	}
 	
 	public boolean isUniqueId(MemberCreateDto dto) {
-		String sql = "SELECT member_id memberId WHERE member_id = ?";
+		String sql = "SELECT member_id memberId FROM member WHERE member_id = ?";
 		try (
 			Connection conn = MyDataSource.getConn();
 			PreparedStatement stmt = conn.prepareStatement(sql);

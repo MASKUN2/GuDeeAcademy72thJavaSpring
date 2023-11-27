@@ -58,30 +58,69 @@
 	</div>
 	<div align="center">
 		<H1>${member.memberId}, welcome</H1>
+		<c:if test="${member != null}">
+		<a type="button" class="btn btn-light btn-block" href="${pageContext.request.contextPath}/member/logout">SIGN OUT</a>
+		</c:if>
+		<c:if test="${member == null}">
+		<button type="button" class="btn btn-light btn-block" data-bs-toggle="collapse" data-bs-target="#SIGNIN">SIGN IN</button>
+		<button type="button" class="btn btn-light btn-block" data-bs-toggle="collapse" data-bs-target="#SIGNUP">SIGN UP</button>
+		</c:if>
+		<button type="button" class="btn btn-light btn-block" data-bs-toggle="collapse" data-bs-target="#NOTICE">NOTICE</button>
 	</div>
-	<div class="row">
-	<div class="col d-grid">
-		<button type="button" class="btn btn-light btn-block" data-bs-toggle="collapse" data-bs-target="#demo">NOTICE</button>
+	<div class="row my-2">
+	<div class="col">
+	</div>
+	<div class="col" align="center">
+ 		<div id="NOTICE" class="collapse border" align="center">
+   			<h2>NOTICE</h2>
+   			<table class="table p-3">
+   				<c:forEach var="map" items="${noticeList}">
+   				<tr>
+   					<td>
+   						${map['noticeNo']}
+   					</td>
+   					<td>
+   						<a href="./notice?noticeNo=${map['noticeNo']}" style="text-decoration: none; color: black;">${map['noticeTitle']}</a>
+   					</td>
+   				</tr>
+   				</c:forEach>
+   			</table>
+ 		</div>
+ 		<div id="SIGNIN" class="collapse border" align="center">
+			<div class="container my-5">
+				<h3> SIGN IN</h3>
+				<form class="form-control" action="${pageContext.request.contextPath}/member/login" method="post">
+					<div class="my-3">
+						<input id="id" name="id" type="text" placeholder="아이디를 입력하세요">
+					</div>
+					<div class="my-3">
+						<input id="pw" name="pw" type="password" placeholder="비밀번호를 입력하세요">
+					</div>
+					<div class="my-3">
+						<button class="btn btn-light btn-block">submit</button>
+					</div>
+				</form>
+			</div> 		
+ 		</div>
+ 		<div id="SIGNUP" class="collapse border" align="center">
+			<div class="container my-5">
+				<h1>SIGN UP</h1>
+				<form class="form-control" action="${pageContext.request.contextPath}/member/create" method="post">
+					<div class="my-3">
+						<input id="id" name="id" type="text" placeholder="아이디를 입력하세요">
+					</div>
+					<div class="my-3">
+						<input id="pw" name="pw" type="password" placeholder="비밀번호를 입력하세요">
+					</div>
+					<div class="my-3">
+						<button id="btn" class="btn btn-light btn-block" >submit</button>
+					</div>
+				</form>
+			</div>
+ 		</div>
 	</div>
 	<div class="col">
-  		<div align="right">
-  		</div>
-	 		<div id="demo" class="collapse border" align="center">
-	   			<h2>NOTICE</h2>
-	   			<table class="table p-3">
-	   				<c:forEach var="map" items="${noticeList}">
-	   				<tr>
-	   					<td>
-	   						${map['noticeNo']}
-	   					</td>
-	   					<td>
-	   						<a href="./notice?noticeNo=${map['noticeNo']}" style="text-decoration: none; color: black;">${map['noticeTitle']}</a>
-	   					</td>
-	   				</tr>
-	   				</c:forEach>
-	   			</table>
-	 		</div>
-	</div >
+	</div>
 	</div>
 	<div class="row my-5">
 		<div class="col">

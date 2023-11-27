@@ -38,7 +38,7 @@ public class MemberCreateController extends HttpServlet{
 		if(!validationReport.getIsPass()) {
 			//400
 			log.info(validationReport.getValidationLog());
-			resp.sendRedirect(req.getContextPath()+"/member/create");
+			resp.sendRedirect(req.getContextPath()+"/index");
 			return;
 		}
 		
@@ -48,12 +48,12 @@ public class MemberCreateController extends HttpServlet{
 		if (validation == 1) {
 			//200
 			log.info("회원가입성공");
-			resp.sendRedirect(req.getContextPath()+"/member/login");
+			resp.sendRedirect(req.getContextPath()+"/index");
 			return;
 		}else {
 			//400
 			log.info("회원가입실패");
-			resp.sendRedirect(req.getContextPath()+"/member/create");
+			resp.sendRedirect(req.getContextPath()+"/index");
 			return;
 		}
 	}
