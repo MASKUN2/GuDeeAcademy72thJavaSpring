@@ -16,9 +16,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.xml.sax.SAXException;
+
+import api.ApiExplorer;
+import api.ApiVo;
 import dao.notice.NoticeDao;
 import dao.schedule.ScheduleDao;
+import vo.Date;
 import vo.member.Member;
 @WebServlet("/index")
 public class IndexController extends HttpServlet{
@@ -44,21 +50,44 @@ public class IndexController extends HttpServlet{
 		
 		requestMonth = requestDate.getMonthValue();
 		requestYear = requestDate.getYear();
-		
 		lengthOfMonth = requestDate.lengthOfMonth();
 		dayOfWeek = requestDate.getDayOfWeek().getValue();
 		
+		List<Date> dateList = null;
 		try {
-			List<String[]> memoList = null;
 			Member member = (Member) req.getSession().getAttribute("member");
 			ScheduleDao dao = new ScheduleDao();
-			memoList = dao.retrieveMonthSchedule(member.getMemberId(),requestDate.format(DateTimeFormatter.ofPattern("Y-MM")));
-			req.setAttribute("memoList", memoList);
+			dateList = dao.retrieveMonthSchedule(member.getMemberId(),requestDate);
+			req.setAttribute("dateList", dateList);
 		} catch (Exception e) {
 			log.info("로그인정보가 없습니다.");
 			e.printStackTrace();
 		}
-		
+		System.out.println(" breakPOint");
+		try {
+			List<ApiVo> holidayList= ApiExplorer.getHolidays(requestDate);
+			System.out.println(" holidayList" + holidayList == null);
+			if(holidayList != null && dateList != null) {
+				System.out.println(" Steam");
+				dateList.forEach(d -> {
+					for(ApiVo apiVo : holidayList) {
+						System.out.println(" d.getdate: "+d.getDate()+"holiday:" +Integer.parseInt(apiVo.getLocdate().substring(6, 8)));
+						if (d.getDate() == Integer.parseInt(apiVo.getLocdate().substring(6, 8))){
+							d.setDateName(apiVo.getDateName());
+							d.setHoliday(true);
+						}
+					}
+				});
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(dateList != null) {
+		System.out.println("매핑테스트");
+		dateList.forEach(System.out::println);
+		}
 		NoticeDao noticeDao = new NoticeDao();
 		
 		List<Map<String, Object>> noticeList= noticeDao.getNoticeList();

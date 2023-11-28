@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -12,11 +14,13 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import dao.MyDataSource;
+import vo.Date;
+import vo.Month;
 
 public class ScheduleDao {
 	private final Logger log = Logger.getGlobal();
 	
-	public ArrayList<String[]> retrieveMonthSchedule (String memberId, String yearMonth) {
+	public ArrayList<Date> retrieveMonthSchedule (String memberId, LocalDate requestDate) {
 		String Sql = """
 				SELECT CAST(DATE_FORMAT(schedule_date,'%d') AS UNSIGNED) 'date' ,COUNT(*) count, GROUP_CONCAT(substr(schedule_memo,1, 10) ORDER BY createdate SEPARATOR '<br>') memo FROM `schedule` 
 				WHERE member_id = ? AND DATE_FORMAT(schedule_date, '%Y-%m') = ? 
@@ -28,20 +32,22 @@ public class ScheduleDao {
 		){
 			log.info(conn.toString());
 			stmt.setString(1, memberId);
-			stmt.setString(2, yearMonth);
+			stmt.setString(2, requestDate.format(DateTimeFormatter.ofPattern("Y-MM")));
 			log.info(stmt.toString());
 			ResultSet rs = stmt.executeQuery();
-			ArrayList<String[]> list = new ArrayList<>(0);
-			for(int i = 0; i < 32;i++) {
-				list.add(null);
+			ArrayList<Date> dateList = new ArrayList<>();
+			for(int i = 0; i < requestDate.lengthOfMonth();i++) {
+				Date date = new Date();
+				date.setDate(i+1);
+				dateList.add(date);
 			}
 			while(rs.next()) {
-				String rawMemoConcated = rs.getString("memo");
-				String[] arrMemo = rawMemoConcated.split("<br>");
-				list.set(rs.getInt("date"), arrMemo);
+				int dateNo = rs.getInt("date");
+				Date date = dateList.get(dateNo-1);
+				date.setMemoList(rs.getString("memo").split("<br>"));
 			}
-			log.info("list size(): "+list.size());
-			return list;
+			dateList.forEach(System.out::println);
+			return dateList;
 
 		} catch (SQLException e) {
 			log.severe("SQL fail 롤백합니다."); // conn.close()는 commit 하지 않은 미완결 트랜잭션을 자동으로  Rollback시킴

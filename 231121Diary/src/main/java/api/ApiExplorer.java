@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +21,17 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  * https://www.data.go.kr/data/15012690/openapi.do
  * */
 public class ApiExplorer {
-    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
+    public static List<ApiVo> getHolidays (LocalDate date) throws IOException, ParserConfigurationException, SAXException {
+    	String thisYear = String.valueOf(date.getYear());
+    	String thisMonth = String.valueOf(date.getMonthValue());
+    	if(thisMonth.length() == 1) {
+    		thisMonth = "0"+thisMonth;
+    	}
+    	
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=ZbmPZ9Fmf4lkuzc5QHJOW5eGFvcOxN52X%2FBMmG6A5SBVoVwogSlJ035lgjUPXAZFwZiqmXRhMAqBGAryiHatIQ%3D%3D"); /*Service Key*/
-        urlBuilder.append("&" + URLEncoder.encode("solYear","UTF-8") + "=" + URLEncoder.encode("2023", "UTF-8")); /*연*/
-        urlBuilder.append("&" + URLEncoder.encode("solMonth","UTF-8") + "=" + URLEncoder.encode("05", "UTF-8")); /*월*/
+        urlBuilder.append("&" + URLEncoder.encode("solYear","UTF-8") + "=" + URLEncoder.encode(thisYear, "UTF-8")); /*연*/
+        urlBuilder.append("&" + URLEncoder.encode("solMonth","UTF-8") + "=" + URLEncoder.encode(thisMonth, "UTF-8")); /*월*/
         URL url = new URL(urlBuilder.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
@@ -67,10 +74,15 @@ public class ApiExplorer {
 		    for(ApiVo v : list) {
 	        	System.out.println(v.toString());
 	        }
+		    return list;
         }else if(!itemsNode.isEmpty()){
         	ApiVo v = new ApiVo();
         	v = objectMapper.readValue(itemsNode.toString(), ApiVo.class);
         	System.out.println(v.toString());
+        	list.add(v);
+        	return list;
+		}else {
+			return null;
 		}
         
 

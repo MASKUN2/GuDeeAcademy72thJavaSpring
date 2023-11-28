@@ -161,23 +161,23 @@
 		</c:forEach>
 	  	<c:forEach var="i" begin="1" end="${lengthOfMonth}" >
 			<c:set var="cnt" value="${cnt+1}"/>
-	    	<c:if test="${(cnt+1)%7 == 0 }">
+	    	<c:if test="${(cnt+1)%7 == 0}">
 	    		<c:set var="colorOfday" value="col calendar-saturday"/>
 	    	</c:if>
-	    	<c:if test="${cnt%7 == 0 }">
+	    	<c:if test="${cnt%7 == 0 || ((dateList[i-1].isHoliday()) == true)}">
 	    		<c:set var="colorOfday" value="col calendar-sunday"/>
 	    	</c:if>
 				<div class="${colorOfday}">
-					${i}
+					${i} ${dateList[i-1].dateName}
 					<c:if test="${member != null}">
 						<a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule?date=${requestYear}-${requestMonth}-${i}"><span style="font-size: 12px;">✏️</span></a>
 					</c:if>
 					<div>
 						<c:forEach var="j" begin="0" end="2">
-							<span style="color: black; font-weight: normal; font-size: 14px;">${memoList[i][j]}</span><br>
-							<c:if test="${j==2 && memoList[i][j+1] != null }">
+							<span style="color: black; font-weight: normal; font-size: 14px;">${dateList[i-1].memoList[j]}</span><br>
+							<c:if test="${j==2 && dateList[i-1].memoList[j+1] != null }">
 								<span class="badge rounded-pill bg-secondary" style="font-size: 8px;">
-									<c:out value="${fn:length(memoList[i])-3}+"></c:out>
+									<c:out value="${fn:length(dateList[i-1].memoList)-3}+"></c:out>
 								</span>
 							</c:if>
 						</c:forEach>
