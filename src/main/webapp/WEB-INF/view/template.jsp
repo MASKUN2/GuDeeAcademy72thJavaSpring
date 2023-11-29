@@ -10,6 +10,7 @@
 </head>
 <body>
 <div class="container my-5">
+<jsp:include page="/WEB-INF/view/menu.jsp"/>
 
 </div>
 </body>
