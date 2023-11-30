@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maskun.projectdiary.mapper.HomeMapper">
+    <select id="selectMonthMemoList" parameterType="java.util.Map" resultType="com.maskun.projectdiary.vo.Memo">
+        SELECT
+            DATE_FORMAT(schedule_date,'%d') dateNumber,
+            schedule_memo memo
+        FROM `schedule`
+        WHERE member_id = #{memberId} AND
+              DATE_FORMAT(schedule_date, '%Y-%m') = #{yearMonth}
+        ORDER BY schedule_date
+    </select>
+</mapper>

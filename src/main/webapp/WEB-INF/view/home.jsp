@@ -64,17 +64,17 @@
             <c:if test="${member != null}">
                 <a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule?date=${requestYear}-${requestMonth}-${i}"><span style="font-size: 12px;">✏️</span></a>
             </c:if>
-        <div>
-            <c:forEach var="j" begin="0" end="2">
-                <span style="color: black; font-weight: normal; font-size: 14px;">${memoList[i][j]}</span><br>
-                <c:if test="${j==2 && memoList[i][j+1] != null }">
-                            <span class="badge rounded-pill bg-secondary" style="font-size: 8px;">
-                                <c:out value="${fn:length(memoList[i])-3}+"></c:out>
-                            </span>
-                </c:if>
-            </c:forEach>
+            <div>
+                <c:forEach var="j" begin="0" end="2">
+                    <span style="color: black; font-weight: normal; font-size: 14px;">${homeCalendar.dateInfoList.get(i-1).getMemoHead().get(j)}</span><br>
+                    <c:if test="${j==2 && memoList[i][j+1] != null }">
+                                <span class="badge rounded-pill bg-secondary" style="font-size: 8px;">
+                                    <c:out value="${fn:length(memoList[i])-3}+"></c:out>
+                                </span>
+                    </c:if>
+                </c:forEach>
+            </div>
         </div>
-    </div>
         <c:if test="${cnt % 7 == 0}">
         </div> <div class="row">
     </c:if>

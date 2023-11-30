@@ -2,8 +2,11 @@ package com.maskun.projectdiary.service;
 
 import com.maskun.projectdiary.domain.HolidayApiRequester;
 import com.maskun.projectdiary.domain.HolidayApiVo;
+import com.maskun.projectdiary.mapper.HomeMapper;
 import com.maskun.projectdiary.vo.DateInfo;
 import com.maskun.projectdiary.vo.HomeCalendar;
+import com.maskun.projectdiary.vo.Member;
+import com.maskun.projectdiary.vo.Memo;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +21,7 @@ import java.util.List;
 @Service
 public class HomeService {
     private final HolidayApiRequester holidayApiRequester;
-
+    private final HomeMapper homeMapper;
     public HomeCalendar getCalendar(String yearMonth, HttpSession session) {
         HomeCalendar homeCalendar = new HomeCalendar(yearMonth);
         List<DateInfo> dateInfoList  = homeCalendar.getDateInfoList();
@@ -31,6 +34,13 @@ public class HomeService {
         }catch (Exception e){
             e.printStackTrace();
         }
+
+        if(session.getAttribute("memberLoggedIn") != null){
+            Member member = (Member) session.getAttribute("memberLoggedIn");
+            List<Memo> monthMemoList = homeMapper.selectMonthMemoList(member.getMemberId(),yearMonth);
+            monthMemoList.forEach(m -> dateInfoList.get(m.getDateNumber()-1).addDateMemo(m));
+        }
+
         log.debug("생성된 homeCalendar::toString = {}",homeCalendar.toString());
         return homeCalendar;
     }

@@ -31,7 +31,7 @@ public class MemberController {
         boolean isSuccess = service.doLogin(loginRequest, session);
         if(isSuccess){
             model.addAttribute("serverMessage","Login Success");
-            return "home";
+            return "redirect:/home";
         }else {
             model.addAttribute("serverMessage","Login fail");
             getLoginPage();

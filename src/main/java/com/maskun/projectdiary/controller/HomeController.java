@@ -19,6 +19,10 @@ import java.time.format.DateTimeParseException;
 @Controller
 public class HomeController {
     private final HomeService service;
+    @GetMapping("/home")
+    public String home(){
+        return "redirect:/home/"+YearMonth.now().toString();
+    }
     @GetMapping("/home/{yearMonth}")
     public String home(@PathVariable String yearMonth, HttpSession session, Model model){
         try{
