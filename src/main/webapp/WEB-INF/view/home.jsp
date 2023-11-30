@@ -1,6 +1,19 @@
+<%@ page import="java.util.Enumeration" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%
+    //Debug용 소스
+     Enumeration<String> attributeNames = request.getAttributeNames();
+     while (attributeNames.hasMoreElements()){
+         String attributeName = attributeNames.nextElement();
+         Object attributeValue = request.getAttribute(attributeName);
+         if(!attributeName.startsWith("org.springframework")){
+             System.out.println(attributeName + "=" + attributeValue );
+         }
+     }
+
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,55 +36,34 @@
 <body>
 <div class="container my-5">
     <jsp:include page="/WEB-INF/view/menu.jsp"/>
-    home
-
-<div>
-    <div align="center"><h1>${requestYear} ${requestMonth} CALENDAR</h1></div>
-    <div class="col" align="right">
-        <form method="post">
-            <input name="requestYear" value="${requestYear}" hidden="true" readonly="readonly">
-            <input name="requestMonth" value="${requestMonth}" hidden="true" readonly="readonly">
-            <input name="control" value="month-1" hidden="true" readonly="readonly">
-            <input class="btn btn-light" type="submit" value="Prev.">
-        </form>
-        <form method="post">
-            <input name="requestYear" value="${requestYear}" hidden="true" readonly="readonly">
-            <input name="requestMonth" value="${requestMonth}" hidden="true" readonly="readonly">
-            <input name="control" value="month+1" hidden="true" readonly="readonly">
-            <input class="btn btn-light" type="submit" value="Next">
-        </form>
+    <div align="center"><h1>CALENDAR</h1></div>
+    <div align="center"><h1>${homeCalendar.yearMonth}</h1></div>
+    <div align="center" class="mb-4">
+        <button class="btn btn-light" id="btnPrevious">prev</button>
+        <button class="btn btn-light" id="btnNext">next</button>
     </div>
-</div>
-<div class="row">
-    <div class="col calendar" style="height: 60px; color: red;"><h3>SU</h3></div>
-    <div class="col calendar" style="height: 60px;"><h3>MO</h3></div>
-    <div class="col calendar" style="height: 60px;"><h3>TU</h3></div>
-    <div class="col calendar" style="height: 60px;"><h3>WE</h3></div>
-    <div class="col calendar" style="height: 60px;"><h3>TH</h3></div>
-    <div class="col calendar" style="height: 60px;"><h3>FR</h3></div>
-    <div class="col calendar" style="height: 60px; color: blue;"><h3>SA</h3></div>
-</div>
-<div class="row">
-<c:set var="cnt" value="0"/>
-<c:set var="colorOfday" value="col calendar-day"/>
-    <c:forEach begin="${dayOfWeek}" end="">
-        <c:
+    <div class="row">
+        <div class="col calendar" style="height: 60px; color: red;"><h3>SU</h3></div>
+        <div class="col calendar" style="height: 60px;"><h3>MO</h3></div>
+        <div class="col calendar" style="height: 60px;"><h3>TU</h3></div>
+        <div class="col calendar" style="height: 60px;"><h3>WE</h3></div>
+        <div class="col calendar" style="height: 60px;"><h3>TH</h3></div>
+        <div class="col calendar" style="height: 60px;"><h3>FR</h3></div>
+        <div class="col calendar" style="height: 60px; color: blue;"><h3>SA</h3></div>
+    </div>
+    <div class="row">
+    <c:set var="cnt" value="0"/>
+    <c:forEach begin="1" end="${homeCalendar.numFrontBlank}">
         <c:set var="cnt" value="${cnt+1}"/>
-        <div class="${colorOfday}"></div>
+        <div class="col calendar"></div>
     </c:forEach>
-    <c:forEach var="i" begin="1" end="${empty lengthOfMonth ? 1 : lengthOfMonth}" >
-    <c:set var="cnt" value="${cnt+1}"/>
-    <c:if test="${(cnt+1)%7 == 0 }">
-        <c:set var="colorOfday" value="col calendar-saturday"/>
-    </c:if>
-    <c:if test="${cnt%7 == 0 }">
-        <c:set var="colorOfday" value="col calendar-sunday"/>
-    </c:if>
-    <div class="${colorOfday}">
-            ${i}
-        <c:if test="${member != null}">
-            <a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule?date=${requestYear}-${requestMonth}-${i}"><span style="font-size: 12px;">✏️</span></a>
-        </c:if>
+    <c:forEach var="i" begin="1" end="${homeCalendar.lastDate}" >
+        <c:set var="cnt" value="${cnt+1}"/>
+        <div class="col calendar" style="${ ((cnt-1) % 7 == 0 || (homeCalendar.dateInfoList.get(i-1).isHoliday() == true) )? "color: red;" : (cnt % 7 == 0)? "color: blue;" : "color: black;"}">
+            ${i} ${homeCalendar.dateInfoList.get(i-1).dateName}
+            <c:if test="${member != null}">
+                <a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule?date=${requestYear}-${requestMonth}-${i}"><span style="font-size: 12px;">✏️</span></a>
+            </c:if>
         <div>
             <c:forEach var="j" begin="0" end="2">
                 <span style="color: black; font-weight: normal; font-size: 14px;">${memoList[i][j]}</span><br>
@@ -83,19 +75,34 @@
             </c:forEach>
         </div>
     </div>
-    <c:set var="colorOfday" value="col calendar-day"/>
-    <c:if test="${cnt%7 == 0 }">
-</div> <div class="row">
-</c:if>
-</c:forEach>
-<c:forEach begin="1" end="${7-(lengthOfMonth+dayOfWeek-1)%7}" >
-    <c:set var="cnt" value="${cnt+1}"/>
-    <div class="${colorOfday}"></div>
-</c:forEach>
-</div>
-</div>
-
+        <c:if test="${cnt % 7 == 0}">
+        </div> <div class="row">
+    </c:if>
+    </c:forEach>
+    <c:forEach begin="1" end="${homeCalendar.numBackBlank}" >
+        <div class="col calendar"></div>
+    </c:forEach>
+    </div>
 </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    let year = ${homeCalendar.year};
+    let month = ${homeCalendar.month};
+    let PreviousUrl = "/diary/home/"+year+"-"+(month-1).toString().padStart(2,"0");
+    let NextUrl = "/diary/home/"+year+"-"+(month+1).toString().padStart(2,"0");
+    if(month-1 == 0){
+        PreviousUrl = "/diary/home/"+(year-1)+"-"+"12";
+    }
+    if(month+1 == 13){
+        NextUrl = "/diary/home/"+(year+1)+"-"+"01";
+    }
+    $("#btnPrevious").click(function (){
+        window.location.href = PreviousUrl;
+    })
+    $("#btnNext").click(function (){
+        window.location.href = NextUrl;
+    })
+
+</script>
 </html>

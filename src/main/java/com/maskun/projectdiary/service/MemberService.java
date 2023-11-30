@@ -1,6 +1,6 @@
 package com.maskun.projectdiary.service;
 
-import com.maskun.projectdiary.dao.MemberMapper;
+import com.maskun.projectdiary.mapper.MemberMapper;
 import com.maskun.projectdiary.vo.Member;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;

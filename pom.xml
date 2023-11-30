@@ -59,6 +59,10 @@
 			<version>3.0.3</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+		</dependency>
 		<!-- for jsp using start -->
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>

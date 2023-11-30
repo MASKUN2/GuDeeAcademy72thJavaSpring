@@ -1,4 +1,4 @@
-package com.maskun.projectdiary.dao;
+package com.maskun.projectdiary.mapper;
 
 import com.maskun.projectdiary.vo.Member;
 import org.apache.ibatis.annotations.Mapper;
