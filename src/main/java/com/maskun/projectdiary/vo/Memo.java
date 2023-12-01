@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Memo {
+    private int memoNo;
     private int dateNumber;
     private String memo;
 

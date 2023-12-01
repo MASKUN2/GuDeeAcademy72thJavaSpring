@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maskun.projectdiary.mapper.ScheduleMapper">
+    <select id="selectDateScheduleList" parameterType="java.util.Map" resultType="com.maskun.projectdiary.vo.Memo">
+        SELECT
+            DATE_FORMAT(schedule_date,'%d') dateNumber,
+            schedule_memo memo,
+            schedule_no memoNo
+        FROM `schedule`
+        WHERE member_id = #{memberId} AND
+              DATE_FORMAT(schedule_date, '%Y-%m-%d') = #{yearMonthDate}
+        ORDER BY createdate
+    </select>
+    <update id="updateScheduleMemo" parameterType="java.util.Map">
+        UPDATE schedule
+        SET schedule_memo = #{memo}
+        WHERE schedule_no = #{memoNo}
+    </update>
+    <delete id="deleteScheduleMemo" parameterType="java.util.Map">
+        DELETE FROM schedule
+        WHERE schedule_no = #{memoNo}
+    </delete>
+    <insert id="insertScheduleMemo" parameterType="java.util.Map">
+        INSERT INTO schedule
+            (member_id, schedule_date, schedule_memo)
+        VALUES
+            (#{memberId},#{yearMonthDate},#{memo})
+    </insert>
+</mapper>

@@ -57,27 +57,25 @@
         <c:set var="cnt" value="${cnt+1}"/>
         <div class="col calendar"></div>
     </c:forEach>
-    <c:forEach var="i" begin="1" end="${homeCalendar.lastDate}" >
+    <c:forEach var="dateInfo" items="${homeCalendar.dateInfoList}" >
         <c:set var="cnt" value="${cnt+1}"/>
-        <div class="col calendar" style="${ ((cnt-1) % 7 == 0 || (homeCalendar.dateInfoList.get(i-1).isHoliday() == true) )? "color: red;" : (cnt % 7 == 0)? "color: blue;" : "color: black;"}">
-            ${i} ${homeCalendar.dateInfoList.get(i-1).dateName}
-            <c:if test="${member != null}">
-                <a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule?date=${requestYear}-${requestMonth}-${i}"><span style="font-size: 12px;">✏️</span></a>
-            </c:if>
-            <div>
-                <c:forEach var="j" begin="0" end="2">
-                    <span style="color: black; font-weight: normal; font-size: 14px;">${homeCalendar.dateInfoList.get(i-1).getMemoHead().get(j)}</span><br>
-                    <c:if test="${j==2 && memoList[i][j+1] != null }">
-                                <span class="badge rounded-pill bg-secondary" style="font-size: 8px;">
-                                    <c:out value="${fn:length(memoList[i])-3}+"></c:out>
-                                </span>
-                    </c:if>
+        <div class="col calendar" style="${ ((cnt-1) % 7 == 0 || (dateInfo.isHoliday() == true) )? "color: red;" : (cnt % 7 == 0)? "color: blue;" : "color: black;"}">
+            ${dateInfo.dateIndex} <span style="font-size: 14px;">${dateInfo.dateName}</span>
+            <c:if test="${memberLoggedIn != null}">
+                <a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule/${homeCalendar.yearMonth}-${dateInfo.dateIndexStr}"><span style="font-size: 12px;">✏️</span></a>
+            <div style="font-size: 14px; color: black;font-weight: normal;">
+                <c:forEach var="memo" items="${dateInfo.memoHead}">
+                    · ${memo}<br>
                 </c:forEach>
+                    <c:if test="${fn:length(dateInfo.dateMemoList) > fn:length(dateInfo.memoHead)}">
+                        &nbsp;&nbsp;<span style="font-size: 10px; color: darkslateblue; font-weight: bold">${fn:length(dateInfo.dateMemoList) - fn:length(dateInfo.memoHead)}+</span>
+                    </c:if>
             </div>
+            </c:if>
         </div>
         <c:if test="${cnt % 7 == 0}">
         </div> <div class="row">
-    </c:if>
+        </c:if>
     </c:forEach>
     <c:forEach begin="1" end="${homeCalendar.numBackBlank}" >
         <div class="col calendar"></div>

@@ -14,6 +14,10 @@ public class DateInfo {
     private boolean isHoliday;
     private List<Memo> dateMemoList;
 
+    public String getDateIndexStr(){
+        return String.format("%02d", this.dateIndex);
+    }
+
     public DateInfo (int i){
         this.dateIndex = i;
         this.dateMemoList = new ArrayList<>();
@@ -41,7 +45,7 @@ public class DateInfo {
                           return m.getMemo().substring(0, 8);
                        }else{
                            return m.getMemo();
-                       }}).collect(Collectors.toList());
+                       }}).limit(3).collect(Collectors.toList());
         }
 
     }
