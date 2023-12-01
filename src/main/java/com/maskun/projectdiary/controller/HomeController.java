@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeParseException;
 @Slf4j
@@ -33,6 +34,10 @@ public class HomeController {
         }
         HomeCalendar homeCalendar = service.getCalendar(yearMonth, session);
         model.addAttribute("homeCalendar", homeCalendar);
+        if(yearMonth.equals(YearMonth.now().toString())){
+            int todayMarker = LocalDate.now().getDayOfMonth();
+            model.addAttribute("todayMarker", todayMarker);
+        }
         return "home";
     }
 }
