@@ -49,9 +49,12 @@
                     <tr>
                         <td>
                             <div class="m-3">
-                                    ${comment.commentContent}
+                               <span name="commentNo" hidden="hidden">${comment.commentNo}</span>
+                               <span name="commentContent">${comment.commentContent}</span>
                             </div>
                             <div align="right" class="mx-3" >
+                                <button name="btnCommentEdit" class="btn">✏️</button>
+                                <button name="btnCommentDelete" class="btn">❌</button>
                                 <span class="btn btn-secondary btn-sm"> by: ${comment.author}</span>
                             </div>
                         </td>
@@ -62,12 +65,12 @@
                         <form action="${pageContext.request.contextPath}/notice/comment" method="post">
                             <div class="row">
                                 <div class="col pl-3">
-                                    <input name="commentContent" type="text" class="form-control" placeholder="댓글추가" >
-                                    <input name="noticeNo" type="number" value="${notice.noticeNo}" readonly="readonly">
+                                    <textarea name="commentContent" type="text" class="form-control" placeholder="댓글추가" ></textarea>
+                                    <input name="noticeNo" type="number" value="${notice.noticeNo}" readonly="readonly" hidden="hidden">
                                 </div>
-                                <div class="col-2" align="right">
-                                    <input type="checkbox" name="isSecret" value="true">
-                                    <input class="btn btn-light" type="submit" value="➕">
+                                <div class="col-3" align="left">
+                                    🔏<input class="form-check-input align-middle" type="checkbox" name="isSecret" value="true">
+                                    <input class="btn btn-light m-3" type="submit" value="+">
                                 </div>
                             </div>
 
@@ -79,8 +82,36 @@
         <div class="col-3">
         </div>
     </div>
-
 </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $('button[name=btnCommentEdit]').click(function (){
+        let tr = $(this).closest('tr');
+        let commentContent = tr.find('span[name=commentContent').text();
+        console.log(commentContent);
+        let input = '<input name="commentContent" class="form-control" value="'+commentContent+'">'
+        tr.find('span[name=commentContent').replaceWith(input);
+        $(this).click(function (){
+            let tr = $(this).closest('tr');
+            let commentNo = tr.find('span[name=commentNo').text();
+            let commentContent = tr.find('input[name=commentContent').val();
+            console.log(commentNo,commentContent);
+            $.ajax({
+                type : 'PUT',
+                data : JSON.stringify({'commentNo':commentNo, 'commentContent':commentContent}),
+                contentType : 'application/json; charset=utf-8',
+                url:'/diary/notice/comment',
+                success: function (response){
+                    window.location.reload();
+                },
+                error: function (error){
+                    alert('fail');
+                    window.location.reload();
+                }
+            });
+        });
+
+    });
+</script>
 </html>

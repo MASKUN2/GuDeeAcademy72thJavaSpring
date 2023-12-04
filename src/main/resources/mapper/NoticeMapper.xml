@@ -34,5 +34,9 @@
             notice(author, notice_title, notice_content)
         VALUES (#{memberId},#{notice.noticeTitle}, #{notice.noticeContent});
     </insert>
-
+    <insert id="insertNoticeComment" parameterType="java.util.Map">
+        INSERT INTO
+            notice_comment(notice_no, author, comment_content, is_secret)
+        VALUES (#{comment.noticeNo},#{memberId},#{comment.commentContent},#{comment.isSecret})
+    </insert>
 </mapper>

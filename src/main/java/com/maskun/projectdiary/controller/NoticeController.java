@@ -6,6 +6,8 @@ import com.maskun.projectdiary.vo.NoticeComment;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +51,13 @@ public class NoticeController {
         boolean result = service.addNoticeComment(session, comment);
             return "redirect:/notice/"+comment.getNoticeNo();
     }
+    @PutMapping("/comment")
+    public ResponseEntity editComment(@RequestBody NoticeComment comment){
+        log.debug(comment.toString());
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
 
     @GetMapping("/{noticeNo}")
     public String getNotice(@PathVariable Integer noticeNo, Model model){

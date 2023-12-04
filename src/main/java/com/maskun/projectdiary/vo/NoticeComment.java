@@ -12,4 +12,11 @@ public class NoticeComment {
     private String commentContent;
     private boolean isSecret;
     private LocalDateTime createdate;
+
+    public void setIsSecret(boolean isSecret){
+        this.isSecret = isSecret;
+    }
+    public boolean getIsSecret(){
+        return this.isSecret;
+    }
 }
