@@ -4,14 +4,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%
     //Debug용 소스
-     Enumeration<String> attributeNames = request.getAttributeNames();
-     while (attributeNames.hasMoreElements()){
-         String attributeName = attributeNames.nextElement();
-         Object attributeValue = request.getAttribute(attributeName);
-         if(!attributeName.startsWith("org.springframework")){
-             System.out.println(attributeName + "=" + attributeValue );
-         }
-     }
+    Enumeration<String> attributeNames = request.getAttributeNames();
+    while (attributeNames.hasMoreElements()){
+        String attributeName = attributeNames.nextElement();
+        Object attributeValue = request.getAttribute(attributeName);
+        if(!attributeName.startsWith("org.springframework")){
+            System.out.println(attributeName + "=" + attributeValue );
+        }
+    }
 
 %>
 <!DOCTYPE html>

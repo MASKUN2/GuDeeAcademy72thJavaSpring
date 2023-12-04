@@ -1,29 +1,62 @@
 package com.maskun.projectdiary.controller;
 
+import com.maskun.projectdiary.service.NoticeService;
+import com.maskun.projectdiary.vo.Notice;
+import com.maskun.projectdiary.vo.NoticeComment;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.xml.stream.events.Comment;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/notice")
 public class NoticeController {
-    private final noticeService service;
+    private final NoticeService service;
 
-    @GetMapping("/notice")
-    public String getNoticeList(@RequestParam(defaultValue = "1") Integer page){
-        final int NOTICES_PER_PAGE = 6;
-        int from = (page-1)*NOTICES_PER_PAGE;
-        service.getNoticeList(from, NOTICES_PER_PAGE);
-        return "noticeList";
+    @GetMapping
+    public String getNoticeList(@RequestParam(defaultValue = "1") Integer page, Model model){
+        if(page < 1){
+            return "redirect:/notice?page=1";
+        }
+        List<Notice> noticeList = service.getNoticeList(page);
+        model.addAttribute("noticeList", noticeList);
+        return "notice/noticeList";
+    }
+    @GetMapping("/add")
+    public String getNoticeAddForm(HttpSession session){
+        return "notice/noticeAddForm";
     }
 
-    @GetMapping("/notice/{noticeNo}")
-    public String getNotice(@PathVariable Integer noticeNo){
-        service.getNotice(noticeNo);
-        return "notice";
+    @PostMapping
+    public String addNotice(HttpSession session, Notice notice) {
+        boolean result = service.addNotice(session, notice);
+        if(result == true){
+            return "redirect:/notice";
+        }else{
+            return "notice/noticeAddForm";
+        }
+    }
+
+    @PostMapping("/comment")
+    public String addComment(HttpSession session, NoticeComment comment){
+        boolean result = service.addNoticeComment(session, comment);
+            return "redirect:/notice/"+comment.getNoticeNo();
+    }
+
+    @GetMapping("/{noticeNo}")
+    public String getNotice(@PathVariable Integer noticeNo, Model model){
+        Notice notice = service.getNotice(noticeNo);
+        if(notice == null){
+            return "redirect:/notice?page=1";
+        }
+        model.addAttribute("notice", notice);
+        return "notice/notice";
     }
 }
