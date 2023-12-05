@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.net.http.HttpResponse;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -42,7 +43,7 @@ public class HomeController {
         }
         HomeCalendar homeCalendar = service.getCalendar(yearMonth, session);
         model.addAttribute("homeCalendar", homeCalendar);
-        if(yearMonth.equals(YearMonth.now().toString())){
+        if(yearMonth.equals(YearMonth.now().toString())) {
             int todayMarker = LocalDate.now().getDayOfMonth();
             model.addAttribute("todayMarker", todayMarker);
         }
