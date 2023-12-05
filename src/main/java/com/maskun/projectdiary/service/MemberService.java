@@ -24,4 +24,13 @@ public class MemberService {
             return false;
         }
     }
+    @Transactional
+    public boolean addMember(Member member) {
+        int result = mapper.insertMember(member);
+        if (result == 1){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

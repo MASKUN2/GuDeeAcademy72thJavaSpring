@@ -49,12 +49,22 @@
                     <tr>
                         <td>
                             <div class="m-3">
-                               <span name="commentNo" hidden="hidden">${comment.commentNo}</span>
-                               <span name="commentContent">${comment.commentContent}</span>
+                                <span name="commentNo" hidden="hidden">${comment.commentNo}</span>
+                                <c:choose>
+                                <c:when test="${comment.isSecret == true && (comment.author ne memberLoggedIn.memberId && memberLoggedIn.memberLevel != 1)}">
+                                    🔏 SECRET
+                                </c:when>
+                                <c:otherwise>
+                                <c:if test="${comment.isSecret == true}"> 🔏 </c:if>
+                                <span name="commentContent">${comment.commentContent}</span>
+                                </c:otherwise>
+                                </c:choose>
                             </div>
                             <div align="right" class="mx-3" >
+                                <c:if test="${comment.author eq memberLoggedIn.memberId || memberLoggedIn.memberLevel == 1}">
                                 <button name="btnCommentEdit" class="btn">✏️</button>
                                 <button name="btnCommentDelete" class="btn">❌</button>
+                                </c:if>
                                 <span class="btn btn-secondary btn-sm"> by: ${comment.author}</span>
                             </div>
                         </td>
@@ -70,7 +80,7 @@
                                 </div>
                                 <div class="col-3" align="left">
                                     🔏<input class="form-check-input align-middle" type="checkbox" name="isSecret" value="true">
-                                    <input class="btn btn-light m-3" type="submit" value="+">
+                                    <input class="btn btn-secondary m-3" type="submit" value="+">
                                 </div>
                             </div>
 
@@ -111,7 +121,24 @@
                 }
             });
         });
-
     });
+    $('button[name=btnCommentDelete]').click(function (){
+        let tr = $(this).closest('tr');
+        let commentNo = tr.find('span[name=commentNo]').text();
+        console.log(commentNo);
+        $.ajax({
+            url: '/diary/notice/comment',
+            type: 'DELETE',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({'commentNo':commentNo}),
+            success: function (response) {
+                window.location.reload();
+            },
+            error: function (error){
+                console.log(error);
+                window.location.reload();
+            }
+        })
+    })
 </script>
 </html>

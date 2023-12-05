@@ -11,4 +11,10 @@
         where member_id = #{memberId} AND
               member_pw = PASSWORD(#{memberPw})
     </select>
+    <insert id="insertMember" parameterType="com.maskun.projectdiary.vo.Member">
+        INSERT INTO member
+            (member_id, member_pw)
+        values
+            (#{memberId}, PASSWORD(#{memberPw}))
+    </insert>
 </mapper>

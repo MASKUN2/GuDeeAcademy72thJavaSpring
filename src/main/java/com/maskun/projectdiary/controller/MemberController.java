@@ -12,21 +12,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.WebSession;
 
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/member/")
+@RequestMapping("/member")
 public class MemberController {
     private final MemberService service;
 
-    @GetMapping("login")
+    @GetMapping("/login")
     public String getLoginPage(){
         return "member/login";
     }
-    @PostMapping("login")
+    @PostMapping("/login")
     public String doLogin(Member loginRequest, HttpSession session, Model model){
         boolean isSuccess = service.doLogin(loginRequest, session);
         if(isSuccess){
@@ -38,4 +39,23 @@ public class MemberController {
             return null;
         }
     }
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.removeAttribute("memberLoggedIn");
+        return "redirect:/home";
+    }
+    @GetMapping("/add")
+    public String gerMemberAddForm(){
+        return "member/memberAddForm";
+    }
+    @PostMapping("/add")
+    public String addMember(Member member){
+        boolean isSuccess = service.addMember(member);
+        if(isSuccess){
+        return "/home";
+        }else {
+            return "/member/add";
+        }
+    }
+
 }

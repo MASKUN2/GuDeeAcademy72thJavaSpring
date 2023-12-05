@@ -25,7 +25,7 @@
                notice_no noticeNo,
                author,
                comment_content commentContent,
-               is_secret isSeceret,
+               is_secret isSecret,
                createdate
         FROM notice_comment WHERE notice_no = #{noticeNo};
     </select>
@@ -39,4 +39,14 @@
             notice_comment(notice_no, author, comment_content, is_secret)
         VALUES (#{comment.noticeNo},#{memberId},#{comment.commentContent},#{comment.isSecret})
     </insert>
+    <update id="updateNoticeComment" parameterType="java.util.Map">
+        UPDATE
+            notice_comment
+        SET comment_content = #{comment.commentContent}
+        WHERE comment_no = #{comment.commentNo};
+    </update>
+    <update id="deleteNoticeComment" parameterType="java.util.Map">
+        DELETE FROM notice_comment
+        WHERE comment_no = #{comment.commentNo};
+    </update>
 </mapper>

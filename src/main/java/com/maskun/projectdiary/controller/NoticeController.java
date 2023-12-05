@@ -21,7 +21,8 @@ import java.util.List;
 @RequestMapping("/notice")
 public class NoticeController {
     private final NoticeService service;
-
+    /** it brings NoticeCommentList involved.
+     * */
     @GetMapping
     public String getNoticeList(@RequestParam(defaultValue = "1") Integer page, Model model){
         if(page < 1){
@@ -31,6 +32,7 @@ public class NoticeController {
         model.addAttribute("noticeList", noticeList);
         return "notice/noticeList";
     }
+
     @GetMapping("/add")
     public String getNoticeAddForm(HttpSession session){
         return "notice/noticeAddForm";
@@ -45,20 +47,6 @@ public class NoticeController {
             return "notice/noticeAddForm";
         }
     }
-
-    @PostMapping("/comment")
-    public String addComment(HttpSession session, NoticeComment comment){
-        boolean result = service.addNoticeComment(session, comment);
-            return "redirect:/notice/"+comment.getNoticeNo();
-    }
-    @PutMapping("/comment")
-    public ResponseEntity editComment(@RequestBody NoticeComment comment){
-        log.debug(comment.toString());
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-
-
     @GetMapping("/{noticeNo}")
     public String getNotice(@PathVariable Integer noticeNo, Model model){
         Notice notice = service.getNotice(noticeNo);
@@ -67,5 +55,25 @@ public class NoticeController {
         }
         model.addAttribute("notice", notice);
         return "notice/notice";
+    }
+
+    @PostMapping("/comment")
+    public String addComment(HttpSession session, NoticeComment comment){
+        boolean result = service.addNoticeComment(session, comment);
+            return "redirect:/notice/"+comment.getNoticeNo();
+    }
+
+    @PutMapping("/comment")
+    public ResponseEntity editNoticeComment(@RequestBody NoticeComment comment, HttpSession session){
+        log.debug(comment.toString());
+        boolean result = service.editNoticeComment(comment , session);
+        return (result == true)? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/comment")
+    public ResponseEntity deleteNoticeComment(@RequestBody NoticeComment comment, HttpSession session){
+        log.debug(comment.toString());
+        boolean result = service.deleteNoticeComment(comment , session);
+        return (result == true)? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 }

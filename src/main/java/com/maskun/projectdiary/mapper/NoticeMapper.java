@@ -19,4 +19,8 @@ public interface NoticeMapper {
     List<NoticeComment> selectNoticeCommentList(@Param("noticeNo") int noticeNo);
 
     int insertNoticeComment(@Param("memberId") String memberId, @Param("comment") NoticeComment comment);
+
+    int updateNoticeComment(@Param("memberId") String memberId, @Param("comment") NoticeComment comment);
+
+    int deleteNoticeComment(@Param("memberId") String memberId, @Param("comment") NoticeComment comment);
 }

@@ -40,15 +40,16 @@ public class ScheduleController {
         model.addAttribute("yearMonth", yearMonthDate.substring(0, 7));
         return "schedule/date";
     }
+
     @PostMapping("/schedule")
     public ResponseEntity addMemo(@RequestBody Map<String,String> ReqBodyMap, HttpSession session){
         Member member = (Member) session.getAttribute("memberLoggedIn");
         String yearMonthDate = ReqBodyMap.get("yearMonthDate");
         String memo = ReqBodyMap.get("memo");
         log.debug("add date member={} , memo={}", member, memo);
-        boolean result = service.insertDateSchedule(member.getMemberId(), yearMonthDate,memo);
-        log.debug("service.insertDateSchedule result : {}",result);
-        return (result == true)?
+        boolean isSuccess = service.insertDateSchedule(member.getMemberId(), yearMonthDate,memo);
+        log.debug("service.insertDateSchedule result : {}",isSuccess);
+        return (isSuccess)?
                 new ResponseEntity(HttpStatus.OK): new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -56,17 +57,18 @@ public class ScheduleController {
     public ResponseEntity modifyMemo(@PathVariable int memoNo, @RequestBody Map<String,String> memoMap){
         String memo = memoMap.get("memo");
         log.debug("받은 값 : memoNo:{}, memo:{}",memoNo, memoMap.get("memo"));
-        boolean result = service.setDateSchedule(memoNo, memo);
-        log.debug("service.setDateSchedule result : {}",result);
-        return (result == true)?
+        boolean isSuccess = service.setDateSchedule(memoNo, memo);
+        log.debug("service.setDateSchedule result : {}",isSuccess);
+        return (isSuccess)?
                 new ResponseEntity(HttpStatus.OK): new ResponseEntity(HttpStatus.NOT_FOUND);
     }
+
     @DeleteMapping("/schedule/{memoNo}")
     public ResponseEntity removeMemo(@PathVariable int memoNo){
         log.debug("삭제요청 memoNo = {}",memoNo);
-        boolean result = service.delteDateSchedule(memoNo);
-        log.debug(" ervice.delteDateSchedule result = {}",result);
-        return (result == true)?
+        boolean isSuccess = service.delteDateSchedule(memoNo);
+        log.debug(" ervice.delteDateSchedule result = {}",isSuccess);
+        return (isSuccess)?
                 new ResponseEntity(HttpStatus.OK): new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 }

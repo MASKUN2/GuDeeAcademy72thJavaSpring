@@ -20,10 +20,18 @@ import java.time.format.DateTimeParseException;
 @Controller
 public class HomeController {
     private final HomeService service;
+
+    /**
+     * 홈으로 요청한 경우 현재 yearMonth 페이지로 이동
+     */
     @GetMapping("/home")
     public String home(){
         return "redirect:/home/"+YearMonth.now().toString();
     }
+
+    /**
+     * 홈 캘린더 페이지
+     */
     @GetMapping("/home/{yearMonth}")
     public String home(@PathVariable String yearMonth, HttpSession session, Model model){
         try{

@@ -6,16 +6,16 @@
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <title>login</title>
+    <title>register</title>
 </head>
 <body>
 <div class="container my-5">
     <jsp:include page="/WEB-INF/view/menu.jsp"/>
-    <h1>LOGIN</h1>
+    <h1>REGISTER</h1>
     <form method="post" class="form-control">
             member ID : <input name="memberId" class="form-control">
             member password : <input name="memberPw" class="form-control">
-        <button class="btn" type="submit">login</button>
+        <button class="btn" type="submit">register</button>
     </form>
 </div>
 </body>
