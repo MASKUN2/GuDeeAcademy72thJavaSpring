@@ -1,7 +1,7 @@
 package com.maskun.projectdiary.service;
 
-import com.maskun.projectdiary.domain.HolidayApiRequester;
-import com.maskun.projectdiary.domain.HolidayApiVo;
+import com.maskun.projectdiary.externalApiRequest.HolidayApi;
+import com.maskun.projectdiary.externalApiRequest.HolidayApiVo;
 import com.maskun.projectdiary.mapper.HomeMapper;
 import com.maskun.projectdiary.vo.DateInfo;
 import com.maskun.projectdiary.vo.HomeCalendar;
@@ -20,14 +20,14 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class HomeService {
-    private final HolidayApiRequester holidayApiRequester;
+    private final HolidayApi holidayApi;
     private final HomeMapper homeMapper;
     public HomeCalendar getCalendar(String yearMonth, HttpSession session) {
         HomeCalendar homeCalendar = new HomeCalendar(yearMonth);
         List<DateInfo> dateInfoList  = homeCalendar.getDateInfoList();
         List<HolidayApiVo> holidayList;
         try {
-            holidayList = holidayApiRequester.getHoliday(yearMonth);
+            holidayList = holidayApi.getHolidayList(yearMonth);
             holidayList.forEach(h ->{
                 dateInfoList.get(h.getLocdate() - 1).setHoliday(true,h.getDateName());
             });

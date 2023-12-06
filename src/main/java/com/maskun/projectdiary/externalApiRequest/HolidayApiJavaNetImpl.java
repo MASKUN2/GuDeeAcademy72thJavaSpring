@@ -1,13 +1,11 @@
-package com.maskun.projectdiary.domain;
+package com.maskun.projectdiary.externalApiRequest;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,19 +13,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 @Slf4j
+@Primary
 @Component
-public class HolidayApiRequester {
-        private final RestTemplate restTemplate ;
-    @Autowired
-    public HolidayApiRequester(RestTemplateBuilder builder) {
-        this.restTemplate = builder.build();
-    }
-
-    public List<HolidayApiVo> getHoliday(String yearMonth) throws IOException {
+public class HolidayApiJavaNetImpl implements HolidayApi {
+    @Override
+    public List<HolidayApiVo> getHolidayList(String yearMonth) throws IOException {
         //공휴일정보를 불러오는 공공API
 
         String yearStr = yearMonth.substring(0, 4);
@@ -42,6 +35,7 @@ public class HolidayApiRequester {
         urlBuilder.append("&" + URLEncoder.encode("solYear","UTF-8") + "=" + URLEncoder.encode(yearStr, "UTF-8")); /*연*/
         urlBuilder.append("&" + URLEncoder.encode("solMonth","UTF-8") + "=" + URLEncoder.encode(monthStr, "UTF-8")); /*월*/
         URL url = new URL(urlBuilder.toString());
+        log.debug(url.toString());
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json");
@@ -63,6 +57,7 @@ public class HolidayApiRequester {
         String rawResponse = sb.toString();
         //파싱작업
         XmlMapper xmlMapper = new XmlMapper();
+        log.debug(rawResponse);
         JsonNode rootNode = xmlMapper.readTree(rawResponse);
         //노드탐색 후 매핑
         JsonNode itemsNode = rootNode.path("body").path("items").path("item");

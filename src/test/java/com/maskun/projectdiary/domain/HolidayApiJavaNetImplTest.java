@@ -1,22 +1,21 @@
 package com.maskun.projectdiary.domain;
 
+import com.maskun.projectdiary.externalApiRequest.HolidayApiJavaNetImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
-class HolidayApiRequesterTest {
+class HolidayApiJavaNetImplTest {
     @Autowired
-    HolidayApiRequester requester;
+    HolidayApiJavaNetImpl requester;
 
 
     @Test
     public void 휴일을가져온다() throws IOException {
-        requester.getHoliday("2023-05");
+        requester.getHolidayList("2023-05");
 
     }
 
