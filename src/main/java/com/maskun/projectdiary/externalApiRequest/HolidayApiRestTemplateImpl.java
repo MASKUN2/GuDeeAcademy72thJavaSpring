@@ -19,14 +19,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 /**RestTemplate을 활용한 휴일정보 공공데이터 API리퀘스터.
- * 응답해더에 컨텐츠 인코딩타입이 "gzip"으로 지정되는 문제가 있어 디코딩된 한글이 깨졌습니다.
- * 따라서 RestTemplate의 MessageConverter 인코딩타입을 UTF-8로 지정했습니다.(디코딩시 한글출력가능)
- * 또한 URL로 .getForEntity 등의 메소드를 사용해 요청을 보낼 경우 RestTemplate가 자동으로 인코딩을 수행하므로
+ * <p>URL로 .getForEntity 등의 메소드를 사용해 요청을 보낼 경우 RestTemplate가 자동으로 인코딩을 수행하므로
  * 서비스키가 인코딩되어 전달되는 문제가 있었습니다. 이 문제는 encode를 수행하지 않는 URI로 미리 파싱함으로
  * 해결했습니다. .build(true)를 지정해야 encoding을 수행하지 않습니다.
- * 이후 ResponseBody의 XML String을 JsonNode로 conversion 하고 Node 탐색을 수행한 다음
+ * 더이상 xml을 처리하지 않고 json으로 responsebody를 받습니다.
  * key "item"의 value가 1. none ("") 2. object array([{},{}...]) 3. single object ({}) 경우로 조건분기하여
- * 자바 객체로 언마샬링했습니다. 공공API이기 때문에 지연응답이 되는 경우가 있습니다.
+ * 자바 객체로 언마샬링했습니다.</p> 공공API이기 때문에 지연응답이 되는 경우가 있습니다. 타임아웃 및 한글 인코딩 은 restTemplate 스프링 빈에 사전 설정했습니다.
  * 향후 연월에 대한 최초 요청시에 본 메소드를 호출시키고 호출될 때마다 가져온 데이터를 로컬 DB에 저장하여
  * 애플리케이션의 속도의 NeckPoint를 개선하려고 합니다.
  * */
@@ -35,22 +33,24 @@ import java.util.List;
 @Component
 public class HolidayApiRestTemplateImpl implements HolidayApi{
     private final RestTemplate restTemplate;
+    private final String url = "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo";
+    private final String serviceKey = "ZbmPZ9Fmf4lkuzc5QHJOW5eGFvcOxN52X%2FBMmG6A5SBVoVwogSlJ035lgjUPXAZFwZiqmXRhMAqBGAryiHatIQ%3D%3D";
+    private final String pageNo = "1";
+    private final String numOfRows = "10";
 
     @Override
     public List<HolidayApiVo> getHolidayList(String yearMonth) throws JsonProcessingException {
-        String url = "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo";
-        String serviceKey = "ZbmPZ9Fmf4lkuzc5QHJOW5eGFvcOxN52X%2FBMmG6A5SBVoVwogSlJ035lgjUPXAZFwZiqmXRhMAqBGAryiHatIQ%3D%3D";
-        String pageNo = "1";
-        String numOfRows = "10";
+
         String solYear = yearMonth.substring(0, 4);
         String solMonth = yearMonth.substring(5, 7);
+
         URI uri = UriComponentsBuilder.fromHttpUrl(url)
             .queryParam("serviceKey",serviceKey)
             .queryParam("pageNo", pageNo)
             .queryParam("numOfRows", numOfRows)
             .queryParam("solYear", solYear)
             .queryParam("solMonth", solMonth).build(true).toUri();
-        log.debug("생성된 요청 URI.toString = {}",uri.toString());
+        log.debug("생성된 URI.toString() = {}",uri.toString());
 
         log.debug("restTemplate 메세지 컨버터 우선순위출력---------높음");
         restTemplate.getMessageConverters().forEach(c -> log.debug(c.toString()));
