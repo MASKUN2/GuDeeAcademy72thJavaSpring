@@ -1,34 +1,43 @@
 package com.maskun.projectdiary.externalApiRequest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+/**RestTemplate을 활용한 휴일정보 공공데이터 API리퀘스터.
+ * 응답해더에 컨텐츠 인코딩타입이 "gzip"으로 지정되는 문제가 있어 디코딩된 한글이 깨졌습니다.
+ * 따라서 RestTemplate의 MessageConverter 인코딩타입을 UTF-8로 지정했습니다.(디코딩시 한글출력가능)
+ * 또한 URL로 .getForEntity 등의 메소드를 사용해 요청을 보낼 경우 RestTemplate가 자동으로 인코딩을 수행하므로
+ * 서비스키가 인코딩되어 전달되는 문제가 있었습니다. 이 문제는 encode를 수행하지 않는 URI로 미리 파싱함으로
+ * 해결했습니다. .build(true)를 지정해야 encoding을 수행하지 않습니다.
+ * 이후 ResponseBody의 XML String을 JsonNode로 conversion 하고 Node 탐색을 수행한 다음
+ * key "item"의 value가 1. none ("") 2. object array([{},{}...]) 3. single object ({}) 경우로 조건분기하여
+ * 자바 객체로 언마샬링했습니다. 공공API이기 때문에 지연응답이 되는 경우가 있습니다.
+ * 향후 연월에 대한 최초 요청시에 본 메소드를 호출시키고 호출될 때마다 가져온 데이터를 로컬 DB에 저장하여
+ * 애플리케이션의 속도의 NeckPoint를 개선하려고 합니다.
+ * */
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class HolidayApiRestTemplateImpl implements HolidayApi{
+    private final RestTemplate restTemplate;
 
     @Override
-    public List<HolidayApiVo> getHolidayList(String yearMonth) throws IOException, JAXBException {
-        log.debug("yearMonth : {}",yearMonth.toString());
-
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+    public List<HolidayApiVo> getHolidayList(String yearMonth) throws JsonProcessingException {
         String url = "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo";
         String serviceKey = "ZbmPZ9Fmf4lkuzc5QHJOW5eGFvcOxN52X%2FBMmG6A5SBVoVwogSlJ035lgjUPXAZFwZiqmXRhMAqBGAryiHatIQ%3D%3D";
         String pageNo = "1";
@@ -41,33 +50,34 @@ public class HolidayApiRestTemplateImpl implements HolidayApi{
             .queryParam("numOfRows", numOfRows)
             .queryParam("solYear", solYear)
             .queryParam("solMonth", solMonth).build(true).toUri();
-        log.debug(uri.toString());
+        log.debug("생성된 요청 URI.toString = {}",uri.toString());
+
+        log.debug("restTemplate 메세지 컨버터 우선순위출력---------높음");
+        restTemplate.getMessageConverters().forEach(c -> log.debug(c.toString()));
+        log.debug("restTemplate 메세지 컨버터 우선순위출력---------낮음");
+
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
-        String xmlResponse = responseEntity.getBody().toString();
-        log.debug(xmlResponse);
-        XmlMapper xmlMapper = new XmlMapper();
-        JsonNode rootNode = xmlMapper.readTree(xmlResponse);
-        List<JsonNode> nodeList = rootNode.path("body").get("items").findValues("item");
-        log.debug(rootNode.toString());
+        String responseBodytext = responseEntity.getBody().toString();
+        log.debug("responseBody = {}", responseBodytext);
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode itemsNode = rootNode.path("body").path("items").path("item");
-        System.out.println(rootNode.path("body").path("items").findValues("item"));
+        JsonNode rootNode = objectMapper.readTree(responseBodytext);
+        log.debug("변환시킨 JsonNode.toString() = {}", rootNode.toString());
+        JsonNode itemNode = rootNode.findValue("item");
+        log.debug("'item' 프로퍼티 이름으로 찾은 노드 itemNode.toString() = {}", itemNode.toString());
         List<HolidayApiVo> list = new ArrayList<>();
-        if(itemsNode.isArray()) {
-            for(JsonNode n : itemsNode) {
+        if(itemNode.isArray()) {
+            for(JsonNode n : itemNode) {
                 HolidayApiVo v = new HolidayApiVo();
                 v = objectMapper.readValue(n.toString(), HolidayApiVo.class);
                 list.add(v);
             }
-            for(HolidayApiVo v : list) {
-            }
-        }else if(!itemsNode.isEmpty()){
+        }else if(!itemNode.isEmpty()){
             HolidayApiVo v = new HolidayApiVo();
-            v = objectMapper.readValue(itemsNode.toString(), HolidayApiVo.class);
+            v = objectMapper.readValue(itemNode.toString(), HolidayApiVo.class);
             list.add(v);
         }
-        list.forEach( v -> log.debug( "찾은 휴일정보 {}",v.toString()));
-        return null;
+        list.forEach( v -> log.debug( "객체에 매핑하여 리스트에 담은 찾은 휴일정보 {}",v.toString()));
+        return list;
 
     }
 }

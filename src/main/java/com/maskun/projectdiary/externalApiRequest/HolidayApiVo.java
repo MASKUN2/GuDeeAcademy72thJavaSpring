@@ -1,7 +1,6 @@
 package com.maskun.projectdiary.externalApiRequest;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
