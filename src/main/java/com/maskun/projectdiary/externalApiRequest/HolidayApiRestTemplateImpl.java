@@ -33,6 +33,7 @@ import java.util.List;
 @Component
 public class HolidayApiRestTemplateImpl implements HolidayApi{
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
     private final String url = "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo";
     private final String serviceKey = "ZbmPZ9Fmf4lkuzc5QHJOW5eGFvcOxN52X%2FBMmG6A5SBVoVwogSlJ035lgjUPXAZFwZiqmXRhMAqBGAryiHatIQ%3D%3D";
     private final String pageNo = "1";
@@ -59,7 +60,6 @@ public class HolidayApiRestTemplateImpl implements HolidayApi{
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(uri, String.class);
         String responseBodytext = responseEntity.getBody().toString();
         log.debug("responseBody = {}", responseBodytext);
-        ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(responseBodytext);
         log.debug("변환시킨 JsonNode.toString() = {}", rootNode.toString());
         JsonNode itemNode = rootNode.findValue("item");
