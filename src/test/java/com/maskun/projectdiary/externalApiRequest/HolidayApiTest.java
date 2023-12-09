@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.time.YearMonth;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,8 +19,9 @@ class HolidayApiTest {
     void getHolidayList() throws IOException {
         //given
         String yearMonthMay = "2023-05";
+        YearMonth yearMonth = YearMonth.parse(yearMonthMay);
         //when
-        List<HolidayApiVo> holidayList = holidayApi.getHolidayList(yearMonthMay);
+        List<HolidayApiVo> holidayList = holidayApi.getHolidayList(yearMonth);
         //then
         assertThat(holidayList.size()).isEqualTo(3);
     }

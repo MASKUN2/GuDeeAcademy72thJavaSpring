@@ -60,9 +60,9 @@
     <c:forEach var="dateInfo" items="${homeCalendar.dateInfoList}" >
         <c:set var="cnt" value="${cnt+1}"/>
         <div class="col calendar" style="${ ((cnt-1) % 7 == 0 || (dateInfo.isHoliday() == true) )? "color: red;" : (cnt % 7 == 0)? "color: blue;" : "color: black;"}">
-            <span style="${(dateInfo.dateIndex == todayMarker)?"background: linear-gradient(to top, gold 30%, transparent 30%);":null}">${dateInfo.dateIndex}</span> <span style="font-size: 14px;">${dateInfo.dateName}</span>
+            <span style="${(dateInfo.dayOfMonth == todayMarker)?"background: linear-gradient(to top, gold 30%, transparent 30%);":null}">${dateInfo.dayOfMonth}</span> <span style="font-size: 14px;">${dateInfo.dateName}</span>
             <c:if test="${memberLoggedIn != null}">
-                <a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule/${homeCalendar.yearMonth}-${dateInfo.dateIndexStr}"><span style="font-size: 12px;">✏️</span></a>
+                <a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule/${homeCalendar.yearMonth}-${dateInfo.dayOfMonth2Digit}"><span style="font-size: 12px;">✏️</span></a>
             <div style="font-size: 14px; color: black;font-weight: normal;">
                 <c:forEach var="memo" items="${dateInfo.memoHead}">
                     · ${memo}<br>

@@ -1,52 +1,61 @@
 package com.maskun.projectdiary.vo;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class DateInfo {
-    private int dateIndex;
+public class DateInfo{
+    private final LocalDate localDate;
+    private final int dayOfMonth;
+    private final DayOfWeek dayOfWeek;
     private String dateName;
     private boolean isHoliday;
-    private List<Memo> dateMemoList;
+    private final List<Memo> memoList;
 
-    public String getDateIndexStr(){
-        return String.format("%02d", this.dateIndex);
+    public String getDayOfMonth2Digit(){
+        return String.format("%02d", this.dayOfMonth);
     }
 
-    public DateInfo (int i){
-        this.dateIndex = i;
-        this.dateMemoList = new ArrayList<>();
+    public DateInfo (LocalDate localDate){
+        this.localDate = localDate;
+        this.dayOfMonth = this.localDate.getDayOfMonth();
+        this.dayOfWeek = localDate.getDayOfWeek();
+        if (this.dayOfWeek == DayOfWeek.SUNDAY){
+            this.isHoliday = true;
+        }
+        this.memoList = new ArrayList<>();
     }
 
-    public void setHoliday(boolean bool, String dateName){
-        this.isHoliday = bool;
+    public void setHoliday(String dateName){
+        this.isHoliday = true;
         this.dateName = dateName;
     }
-    /*
-    public int isHoliday(){
-        return (this.isHoliday == true)? 1 : 0;
+
+    public void addMemo(Memo memo){
+        this.memoList.add(memo);
     }
+
+    /**
+     * 달력 칸에 표시될 memo의 일부만 가져오는 메소드입니다.
      */
-    public void addDateMemo (Memo memo){
-        this.dateMemoList.add(memo);
-    }
     public List<String> getMemoHead(){
-        if(this.dateMemoList.size() == 0) {
+        final int stringLengthLimit = 10;
+        final int count = 3;
+        if(this.memoList.size() == 0) {
             return null;
         }else {
-            return this.dateMemoList.stream()
+            return this.memoList.stream()
                     .map(m -> {
-                       if(m.getMemo().length() > 10) {
-                          return m.getMemo().substring(0, 8);
-                       }else{
-                           return m.getMemo();
-                       }}).limit(3).collect(Collectors.toList());
+                        String memo = m.getMemo();
+                        return (memo.length() > stringLengthLimit)?
+                               memo.substring(0, stringLengthLimit)
+                               :memo;}
+                    ).limit(count).collect(Collectors.toList());
         }
-
     }
 }

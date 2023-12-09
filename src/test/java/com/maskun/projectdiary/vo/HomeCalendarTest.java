@@ -30,8 +30,8 @@ class HomeCalendarTest {
         HomeCalendar homeCalendar = new HomeCalendar(yearMonth);
         //then
 
-        assertThat(homeCalendar.getDayOfFirstDate()).isEqualTo(wednesday);
-        assertThat(homeCalendar.getLastDate()).isEqualTo(lastDate);
+        assertThat(homeCalendar.getWeekdayNameOfFirstDate()).isEqualTo(wednesday);
+        assertThat(homeCalendar.getLengthOfMonth()).isEqualTo(lastDate);
 
     }
 }

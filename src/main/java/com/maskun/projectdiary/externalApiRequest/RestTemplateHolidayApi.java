@@ -3,19 +3,16 @@ package com.maskun.projectdiary.externalApiRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 /**RestTemplate을 활용한 휴일정보 공공데이터 API리퀘스터.
@@ -31,7 +28,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class HolidayApiRestTemplateImpl implements HolidayApi{
+public class RestTemplateHolidayApi implements HolidayApi{
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final String url = "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo";
@@ -40,10 +37,10 @@ public class HolidayApiRestTemplateImpl implements HolidayApi{
     private final String numOfRows = "10";
 
     @Override
-    public List<HolidayApiVo> getHolidayList(String yearMonth) throws JsonProcessingException {
+    public List<HolidayApiVo> getHolidayList(YearMonth yearMonth) throws JsonProcessingException {
 
-        String solYear = yearMonth.substring(0, 4);
-        String solMonth = yearMonth.substring(5, 7);
+        String solYear = yearMonth.format(DateTimeFormatter.ofPattern("yyyy"));
+        String solMonth = yearMonth.format(DateTimeFormatter.ofPattern("MM"));
 
         URI uri = UriComponentsBuilder.fromHttpUrl(url)
             .queryParam("serviceKey",serviceKey)
@@ -62,9 +59,13 @@ public class HolidayApiRestTemplateImpl implements HolidayApi{
         log.debug("responseBody = {}", responseBodytext);
         JsonNode rootNode = objectMapper.readTree(responseBodytext);
         log.debug("변환시킨 JsonNode.toString() = {}", rootNode.toString());
-        JsonNode itemNode = rootNode.findValue("item");
-        log.debug("'item' 프로퍼티 이름으로 찾은 노드 itemNode.toString() = {}", itemNode.toString());
         List<HolidayApiVo> list = new ArrayList<>();
+        JsonNode itemNode = rootNode.findValue("item");
+        if(itemNode == null){
+            log.debug("'item' 프로퍼티 이름의 노드를 찾을 수 없습니다. 해당 월에 휴일이 없어서 그럴 수도 있습니다.");
+            return list;
+        }
+        log.debug("'item' 프로퍼티 이름으로 찾은 노드 itemNode.toString() = {}", itemNode.toString());
         if(itemNode.isArray()) {
             for(JsonNode n : itemNode) {
                 HolidayApiVo v = new HolidayApiVo();

@@ -12,8 +12,9 @@
 ## v2.1.0 (목표)
 - ✔️java.net기반의 공공데이터포털 기존 휴일정보API를 RestTemplate으로 리팩토링하기  
 [HolidayApiRestTemplateImpl.java](src%2Fmain%2Fjava%2Fcom%2Fmaskun%2Fprojectdiary%2FexternalApiRequest%2FHolidayApiRestTemplateImpl.java)  
-- 🏃‍♂️인터페이스로 결합도 낮추기 [HolidayApi.java](src%2Fmain%2Fjava%2Fcom%2Fmaskun%2Fprojectdiary%2FexternalApiRequest%2FHolidayApi.java)
-- 사용 용어, 단어 일원화를 위한 식별자 사전 작성
+- 🏃‍♂️인터페이스로 결합도 낮추기  
+- [HolidayApi.java](src%2Fmain%2Fjava%2Fcom%2Fmaskun%2Fprojectdiary%2FexternalApiRequest%2FHolidayApi.java)
+- 🏃‍사용 용어, 단어 일원화를 위한 식별자 사전 작성
 - DTO 와 DomainEntity 분리시키기
 - 프론트 입력폼의 유효성 검사&서버 유효성검사 추가
 - 컨트롤러와 서비스 단의 모든 테스트 코드 추가하기

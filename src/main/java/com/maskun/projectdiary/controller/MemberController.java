@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.WebSession;
 
 @Slf4j
@@ -28,7 +25,7 @@ public class MemberController {
         return "member/login";
     }
     @PostMapping("/login")
-    public String doLogin(Member loginRequest, HttpSession session, Model model){
+    public String doLogin(@ModelAttribute Member loginRequest, HttpSession session, Model model){
         boolean isSuccess = service.doLogin(loginRequest, session);
         if(isSuccess){
             model.addAttribute("serverMessage","Login Success");
