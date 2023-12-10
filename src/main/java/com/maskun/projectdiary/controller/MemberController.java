@@ -1,17 +1,13 @@
 package com.maskun.projectdiary.controller;
 
 import com.maskun.projectdiary.service.MemberService;
-import com.maskun.projectdiary.vo.Member;
+import com.maskun.projectdiary.vo.domain.Member;
 import jakarta.servlet.http.HttpSession;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.WebSession;
 
 @Slf4j
 @RequiredArgsConstructor

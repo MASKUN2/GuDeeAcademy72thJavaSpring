@@ -1,7 +1,7 @@
 package com.maskun.projectdiary.service;
 
 import com.maskun.projectdiary.mapper.MemberMapper;
-import com.maskun.projectdiary.vo.Member;
+import com.maskun.projectdiary.vo.domain.Member;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

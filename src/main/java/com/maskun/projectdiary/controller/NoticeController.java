@@ -1,8 +1,8 @@
 package com.maskun.projectdiary.controller;
 
 import com.maskun.projectdiary.service.NoticeService;
-import com.maskun.projectdiary.vo.Notice;
-import com.maskun.projectdiary.vo.NoticeComment;
+import com.maskun.projectdiary.vo.domain.Notice;
+import com.maskun.projectdiary.vo.domain.NoticeComment;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.stream.events.Comment;
 import java.util.List;
 
 @Slf4j

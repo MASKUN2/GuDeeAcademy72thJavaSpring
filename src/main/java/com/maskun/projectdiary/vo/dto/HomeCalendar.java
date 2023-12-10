@@ -1,8 +1,6 @@
-package com.maskun.projectdiary.vo;
+package com.maskun.projectdiary.vo.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.apache.jasper.tagplugins.jstl.core.If;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

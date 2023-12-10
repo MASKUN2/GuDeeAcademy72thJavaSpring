@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.maskun.projectdiary.mapper.NoticeMapper">
-    <select id="selectNoticeList" parameterType="java.util.Map" resultType="com.maskun.projectdiary.vo.Notice">
+    <select id="selectNoticeList" parameterType="java.util.Map" resultType="com.maskun.projectdiary.vo.domain.Notice">
         SELECT notice_no noticeNo,
                author,
                notice_title noticeTitle,
@@ -10,7 +10,7 @@
         FROM notice
         ORDER BY createdate DESC ;
     </select>
-    <select id="selectNotice" parameterType="java.util.Map" resultType="com.maskun.projectdiary.vo.Notice">
+    <select id="selectNotice" parameterType="java.util.Map" resultType="com.maskun.projectdiary.vo.domain.Notice">
         SELECT notice_no noticeNo,
                author,
                notice_title noticeTitle,
@@ -20,7 +20,7 @@
         WHERE notice_no = #{noticeNo}
         ORDER BY createdate DESC ;
     </select>
-    <select id="selectNoticeCommentList" parameterType="java.util.Map" resultType="com.maskun.projectdiary.vo.NoticeComment">
+    <select id="selectNoticeCommentList" parameterType="java.util.Map" resultType="com.maskun.projectdiary.vo.domain.NoticeComment">
         SELECT comment_no commentNo,
                notice_no noticeNo,
                author,

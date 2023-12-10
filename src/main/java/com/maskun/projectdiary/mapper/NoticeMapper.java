@@ -1,7 +1,7 @@
 package com.maskun.projectdiary.mapper;
 
-import com.maskun.projectdiary.vo.Notice;
-import com.maskun.projectdiary.vo.NoticeComment;
+import com.maskun.projectdiary.vo.domain.Notice;
+import com.maskun.projectdiary.vo.domain.NoticeComment;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

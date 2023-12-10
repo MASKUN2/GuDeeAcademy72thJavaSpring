@@ -2,11 +2,11 @@ package com.maskun.projectdiary.service;
 
 import com.maskun.projectdiary.externalApiRequest.HolidayApi;
 import com.maskun.projectdiary.externalApiRequest.HolidayApiVo;
-import com.maskun.projectdiary.mapper.HomeMapper;
-import com.maskun.projectdiary.vo.DateInfo;
-import com.maskun.projectdiary.vo.HomeCalendar;
-import com.maskun.projectdiary.vo.Member;
-import com.maskun.projectdiary.vo.Memo;
+import com.maskun.projectdiary.mapper.HomeCalendarMapper;
+import com.maskun.projectdiary.vo.dto.DateInfo;
+import com.maskun.projectdiary.vo.dto.HomeCalendar;
+import com.maskun.projectdiary.vo.domain.Member;
+import com.maskun.projectdiary.vo.domain.Memo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.YearMonth;
 import java.util.List;
 
+/**휴일정보와 로그인 사용자의 해당월 메모리스트가 담긴 캘린더를 다루는 서비스클래스입니다.
+ *
+ */
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -22,7 +25,7 @@ import java.util.List;
 public class HomeCalenderService {
 
     private final HolidayApi holidayApi;
-    private final HomeMapper homeMapper;
+    private final HomeCalendarMapper homeCalendarMapper;
 
     /**
      * 원하는 달의 달력을 가져옵니다.
@@ -34,7 +37,7 @@ public class HomeCalenderService {
         HomeCalendar homeCalendar = new HomeCalendar(yearMonth);
         List<DateInfo> dateInfoList  = homeCalendar.getDateInfoList();
         try {
-        List<HolidayApiVo> holidayList = holidayApi.getHolidayList(yearMonth);
+            List<HolidayApiVo> holidayList = holidayApi.getHolidayList(yearMonth);
             holidayList.forEach(h ->{
                 int dateIndex = h.getLocdate();
                 String dateName = h.getDateName();
@@ -49,7 +52,7 @@ public class HomeCalenderService {
         if(member != null){
             try {
                 String memberId = member.getMemberId();
-                List<Memo> monthMemoList = homeMapper.selectMonthMemoList(memberId,yearMonth);
+                List<Memo> monthMemoList = homeCalendarMapper.selectMonthMemoList(memberId,yearMonth);
                 monthMemoList.forEach(memo -> {
                     int dateIndex = memo.getDateNumber();
                     dateInfoList.stream().filter(d -> d.getDayOfMonth() == dateIndex).findFirst()

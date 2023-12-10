@@ -1,6 +1,6 @@
 package com.maskun.projectdiary.mapper;
 
-import com.maskun.projectdiary.vo.Member;
+import com.maskun.projectdiary.vo.domain.Member;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-class ScheduleControllerTest {
+class MemoControllerTest {
 
     @Test
     public void 날짜변환에_실패하고_성공한다(){

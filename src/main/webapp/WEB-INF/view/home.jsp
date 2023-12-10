@@ -52,34 +52,31 @@
         <div class="col calendar" style="height: 60px; color: blue;"><h3>SA</h3></div>
     </div>
     <div class="row">
-    <c:set var="cnt" value="0"/>
-    <c:forEach begin="1" end="${homeCalendar.numFrontBlank}">
-        <c:set var="cnt" value="${cnt+1}"/>
+        <c:forEach begin="1" end="${homeCalendar.numberOfFrontBlank}">
         <div class="col calendar"></div>
-    </c:forEach>
-    <c:forEach var="dateInfo" items="${homeCalendar.dateInfoList}" >
-        <c:set var="cnt" value="${cnt+1}"/>
-        <div class="col calendar" style="${ ((cnt-1) % 7 == 0 || (dateInfo.isHoliday() == true) )? "color: red;" : (cnt % 7 == 0)? "color: blue;" : "color: black;"}">
-            <span style="${(dateInfo.dayOfMonth == todayMarker)?"background: linear-gradient(to top, gold 30%, transparent 30%);":null}">${dateInfo.dayOfMonth}</span> <span style="font-size: 14px;">${dateInfo.dateName}</span>
+        </c:forEach>
+        <c:forEach var="dateInfo" items="${homeCalendar.dateInfoList}" >
+        <div class="col calendar" style="${dateInfo.isHoliday()? "color: red;" : (dateInfo.dayOfWeek eq 'SATURDAY')? "color: blue;" : "color: black;"}">
+            <span style="${dateInfo.isToday()?"background: linear-gradient(to top, gold 30%, transparent 30%);":null}">${dateInfo.dayOfMonth}</span> <span style="font-size: 14px;">${dateInfo.dateName}</span>
             <c:if test="${memberLoggedIn != null}">
-                <a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule/${homeCalendar.yearMonth}-${dateInfo.dayOfMonth2Digit}"><span style="font-size: 12px;">✏️</span></a>
+            <a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule/${dateInfo.localDate}"><span style="font-size: 12px;">✏️</span></a>
             <div style="font-size: 14px; color: black;font-weight: normal;">
                 <c:forEach var="memo" items="${dateInfo.memoHead}">
                     · ${memo}<br>
                 </c:forEach>
-                    <c:if test="${fn:length(dateInfo.dateMemoList) > fn:length(dateInfo.memoHead)}">
-                        &nbsp;&nbsp;<span style="font-size: 10px; color: darkslateblue; font-weight: bold">${fn:length(dateInfo.dateMemoList) - fn:length(dateInfo.memoHead)}+</span>
-                    </c:if>
+                <c:if test="${fn:length(dateInfo.memoList) > fn:length(dateInfo.memoHead)}">
+                    &nbsp;&nbsp;<span style="font-size: 10px; color: darkslateblue; font-weight: bold">${fn:length(dateInfo.memoList) - fn:length(dateInfo.memoHead)}+</span>
+                </c:if>
             </div>
             </c:if>
         </div>
-        <c:if test="${cnt % 7 == 0}">
+        <c:if test="${dateInfo.dayOfWeek eq 'SATURDAY'}">
         </div> <div class="row">
         </c:if>
-    </c:forEach>
-    <c:forEach begin="1" end="${homeCalendar.numBackBlank}" >
+        </c:forEach>
+        <c:forEach begin="1" end="${homeCalendar.numberOfBackBlank}" >
         <div class="col calendar"></div>
-    </c:forEach>
+        </c:forEach>
     </div>
 </div>
 </body>
@@ -101,8 +98,6 @@
     $("#btnNext").click(function (){
         window.location.href = NextUrl;
     })
-
-
 
 </script>
 </html>

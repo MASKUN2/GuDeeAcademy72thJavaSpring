@@ -17,6 +17,7 @@ import java.time.Duration;
  * 스프링 빈으로 생성될 경우 공공데이터의 xml response를 자동으로 json 으로 convert 해주었다. 이 점을 유의할 것.
  *
  * 만약 MappingJackson2HttpMessageConverter 가 MappingJackson2XmlHttpMessageConverter 보다 우선순위라면 이같은 일이 발생한다.
+ * 스프링부트의 오토컨피규레이션이 이같은 기본설정을 제공하는듯하다.
  */
 @Configuration
 public class RestTemplateConfig {

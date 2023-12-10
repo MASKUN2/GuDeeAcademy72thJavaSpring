@@ -1,5 +1,6 @@
-package com.maskun.projectdiary.vo;
+package com.maskun.projectdiary.vo.dto;
 
+import com.maskun.projectdiary.vo.domain.Memo;
 import lombok.Data;
 
 import java.time.DayOfWeek;
@@ -15,6 +16,7 @@ public class DateInfo{
     private final DayOfWeek dayOfWeek;
     private String dateName;
     private boolean isHoliday;
+    private boolean isToday;
     private final List<Memo> memoList;
 
     public String getDayOfMonth2Digit(){
@@ -27,6 +29,9 @@ public class DateInfo{
         this.dayOfWeek = localDate.getDayOfWeek();
         if (this.dayOfWeek == DayOfWeek.SUNDAY){
             this.isHoliday = true;
+        }
+        if(localDate.equals(LocalDate.now())){
+            this.isToday = true;
         }
         this.memoList = new ArrayList<>();
     }

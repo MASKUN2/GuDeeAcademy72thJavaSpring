@@ -1,17 +1,15 @@
 package com.maskun.projectdiary.service;
 
 import com.maskun.projectdiary.mapper.NoticeMapper;
-import com.maskun.projectdiary.vo.Member;
-import com.maskun.projectdiary.vo.Notice;
-import com.maskun.projectdiary.vo.NoticeComment;
+import com.maskun.projectdiary.vo.domain.Member;
+import com.maskun.projectdiary.vo.domain.Notice;
+import com.maskun.projectdiary.vo.domain.NoticeComment;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import javax.xml.transform.Result;
 import java.sql.SQLException;
 import java.util.List;
 
