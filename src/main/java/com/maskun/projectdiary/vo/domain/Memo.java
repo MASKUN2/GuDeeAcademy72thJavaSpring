@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Data
 public class Memo {
     private int memoNo;
-    private String memberId;
+    private String userId;
     private LocalDate memoDate;
     private String memoContent;
 }

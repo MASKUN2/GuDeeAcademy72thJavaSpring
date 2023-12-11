@@ -58,7 +58,7 @@
         <c:forEach var="dateInfo" items="${homeCalendar.dateInfoList}" >
         <div class="col calendar" style="${dateInfo.isHoliday()? "color: red;" : (dateInfo.dayOfWeek eq 'SATURDAY')? "color: blue;" : "color: black;"}">
             <span style="${dateInfo.isToday()?"background: linear-gradient(to top, gold 30%, transparent 30%);":null}">${dateInfo.dayOfMonth}</span> <span style="font-size: 14px;">${dateInfo.dateName}</span>
-            <c:if test="${memberLoggedIn != null}">
+            <c:if test="${userLoggedIn != null}">
             <a class="btn btn-basic" href="${pageContext.request.contextPath}/schedule/${dateInfo.localDate}"><span style="font-size: 12px;">✏️</span></a>
             <div style="font-size: 14px; color: black;font-weight: normal;">
                 <c:forEach var="memo" items="${dateInfo.memoHead}">

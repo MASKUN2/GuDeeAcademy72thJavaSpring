@@ -1,6 +1,6 @@
 package com.maskun.projectdiary.security;
 
-import com.maskun.projectdiary.vo.domain.Member;
+import com.maskun.projectdiary.vo.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +18,8 @@ public class AdminAuthInterceptor implements HandlerInterceptor {
         if(requestMethod.equals("GET")){
             return true;
         }
-        Member memberLoggedIn = (Member) request.getSession().getAttribute("memberLoggedIn");
-        if(memberLoggedIn.getMemberLevel() == 1){
+        User userLoggedIn = (User) request.getSession().getAttribute("loginUser");
+        if(userLoggedIn.getMemberLevel() == 1){
             return true;
         }else {
             response.sendRedirect("/diary/member/login");

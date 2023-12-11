@@ -3,11 +3,11 @@
     <a href="/diary/home">home</a>
     <a href="/diary/notice">notice</a>
 
-    <c:if test="${memberLoggedIn == null}">
-    <a href="/diary/member/login">login</a>
-    <a href="/diary/member/add">register</a>
+    <c:if test="${userLoggedIn == null}">
+    <a href="/diary/user/login">login</a>
+    <a href="/diary/user/add">register</a>
     </c:if>
-    <c:if test="${memberLoggedIn != null}">
-    <a href="/diary/member/logout">logout</a>
+    <c:if test="${userLoggedIn != null}">
+    <a href="/diary/user/logout">logout</a>
     </c:if>
 </div>

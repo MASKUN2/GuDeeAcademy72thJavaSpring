@@ -1,7 +1,7 @@
 package com.maskun.projectdiary.service;
 
 import com.maskun.projectdiary.mapper.NoticeMapper;
-import com.maskun.projectdiary.vo.domain.Member;
+import com.maskun.projectdiary.vo.domain.User;
 import com.maskun.projectdiary.vo.domain.Notice;
 import com.maskun.projectdiary.vo.domain.NoticeComment;
 import jakarta.servlet.http.HttpSession;
@@ -36,9 +36,9 @@ public class NoticeService {
 
     @Transactional
     public boolean addNotice(HttpSession session, Notice notice) {
-        Member member = (Member) session.getAttribute("memberLoggedIn");
+        User user = (User) session.getAttribute("loginUser");
         log.debug("전달된 정보 {}", notice.toString());
-        int result = noticeMapper.insertNotice(member.getMemberId(), notice);
+        int result = noticeMapper.insertNotice(user.getMemberId(), notice);
         if (result == 1) {
             return true;
         } else {
@@ -53,9 +53,9 @@ public class NoticeService {
 
     @Transactional
     public boolean addNoticeComment(HttpSession session, NoticeComment comment) {
-        Member member = (Member) session.getAttribute("memberLoggedIn");
+        User user = (User) session.getAttribute("loginUser");
         log.debug("전달된 정보 {}", comment.toString());
-        int result = noticeMapper.insertNoticeComment(member.getMemberId(), comment);
+        int result = noticeMapper.insertNoticeComment(user.getMemberId(), comment);
         if (result == 1) {
             return true;
         } else {
@@ -70,9 +70,9 @@ public class NoticeService {
 
     @Transactional
     public boolean editNoticeComment(NoticeComment comment, HttpSession session) {
-        Member member = (Member) session.getAttribute("memberLoggedIn");
+        User user = (User) session.getAttribute("loginUser");
         log.debug("전달된 정보 {}", comment.toString());
-        int result = noticeMapper.updateNoticeComment(member.getMemberId(), comment);
+        int result = noticeMapper.updateNoticeComment(user.getMemberId(), comment);
         if (result == 1) {
             return true;
         } else {
@@ -87,9 +87,9 @@ public class NoticeService {
 
     @Transactional
     public boolean deleteNoticeComment(NoticeComment comment, HttpSession session) {
-        Member member = (Member) session.getAttribute("memberLoggedIn");
+        User user = (User) session.getAttribute("loginUser");
         log.debug("전달된 정보 {}",comment.toString());
-        int result = noticeMapper.deleteNoticeComment(member.getMemberId(), comment);
+        int result = noticeMapper.deleteNoticeComment(user.getMemberId(), comment);
             if(result ==1){
             return true;
         }else{

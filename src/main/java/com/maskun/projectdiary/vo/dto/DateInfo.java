@@ -56,7 +56,7 @@ public class DateInfo{
         }else {
             return this.memoList.stream()
                     .map(m -> {
-                        String memo = m.getMemo();
+                        String memo = m.getMemoContent();
                         return (memo.length() > stringLengthLimit)?
                                memo.substring(0, stringLengthLimit)
                                :memo;}

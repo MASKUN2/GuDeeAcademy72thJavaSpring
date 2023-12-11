@@ -1,6 +1,5 @@
 package com.maskun.projectdiary.vo.dto;
 
-import com.maskun.projectdiary.vo.domain.Member;
 import com.maskun.projectdiary.vo.domain.Memo;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

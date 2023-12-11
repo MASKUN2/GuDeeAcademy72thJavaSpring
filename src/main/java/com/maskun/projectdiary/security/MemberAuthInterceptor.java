@@ -1,6 +1,6 @@
 package com.maskun.projectdiary.security;
 
-import com.maskun.projectdiary.vo.domain.Member;
+import com.maskun.projectdiary.vo.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +14,8 @@ public class MemberAuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.debug("인터셉터호출");
-        Member memberLoggedIn = (Member) request.getSession().getAttribute("memberLoggedIn");
-        if(memberLoggedIn != null){
+        User userLoggedIn = (User) request.getSession().getAttribute("loginUser");
+        if(userLoggedIn != null){
             return true;
         }else {
             response.sendRedirect("/diary/member/login");

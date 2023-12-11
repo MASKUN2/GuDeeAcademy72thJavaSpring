@@ -26,7 +26,7 @@
                 </tr>
                 <tr>
                     <td class="p-3">AUTHOR</td>
-                    <td>${memberLoggedIn.memberId}</td>
+                    <td>${userLoggedIn.memberId}</td>
                 </tr>
                 <tr height="300 px">
                     <td class="p-3">content</td>

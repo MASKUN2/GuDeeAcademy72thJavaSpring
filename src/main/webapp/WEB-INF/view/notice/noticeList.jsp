@@ -39,7 +39,7 @@
         </tr>
         </c:forEach>
     </table>
-    <c:if test="${memberLoggedIn.memberLevel == 1}">
+    <c:if test="${userLoggedIn.memberLevel == 1}">
     <a href="/diary/notice/add" class="btn" >write</a>
     </c:if>
 

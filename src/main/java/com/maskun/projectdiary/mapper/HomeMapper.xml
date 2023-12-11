@@ -3,11 +3,14 @@
 <mapper namespace="com.maskun.projectdiary.mapper.HomeCalendarMapper">
     <select id="selectMonthMemoList" parameterType="java.util.Map" resultType="com.maskun.projectdiary.vo.domain.Memo">
         SELECT
-            DATE_FORMAT(schedule_date,'%d') dateNumber,
-            schedule_memo memo
-        FROM `schedule`
-        WHERE member_id = #{memberId} AND
-              DATE_FORMAT(schedule_date, '%Y-%m') = #{yearMonth}
-        ORDER BY schedule_date
+            memo_no memoNo,
+            memo_date memoDate,
+            user_id userId,
+            memo_content memoContent
+        FROM memo
+        WHERE
+            user_id = #{user.userId} AND
+            DATE_FORMAT(memo_date, '%Y-%M')  = #{yearMonth}
+        ORDER BY memo_date
     </select>
 </mapper>

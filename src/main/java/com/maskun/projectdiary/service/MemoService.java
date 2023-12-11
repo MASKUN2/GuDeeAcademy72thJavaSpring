@@ -1,7 +1,7 @@
 package com.maskun.projectdiary.service;
 
 import com.maskun.projectdiary.mapper.MemoMapper;
-import com.maskun.projectdiary.vo.domain.Member;
+import com.maskun.projectdiary.vo.domain.User;
 import com.maskun.projectdiary.vo.domain.Memo;
 import com.maskun.projectdiary.vo.dto.MemoAddDto;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +22,8 @@ public class MemoService {
     /**
      * 해당 날짜의 메모리스트를 가져옵니다.
      */
-    public List<Memo> getDateMemoList(LocalDate localDate, Member member) {
-        String memberId = member.getMemberId();
-        List<Memo> dateMemoList = memoMapper.selectDateMemoList(memberId, localDate);
+    public List<Memo> getDateMemoList(LocalDate localDate, User user) {
+        List<Memo> dateMemoList = memoMapper.selectDateMemoList(user, localDate);
         return dateMemoList;
     }
 
@@ -49,8 +48,7 @@ public class MemoService {
      * 메모를 추가합니다.
      */
     @Transactional
-    public boolean addMemo(Member member, MemoAddDto memoAddDto) {
-        String memberId = member.getMemberId();
+    public boolean addMemo(User user, MemoAddDto memoAddDto) {
         Memo memo = memoAddDto.toDomainEntity();
         int numberOfRowsAffected = memoMapper.insertMemo(memberId,memo);
         return (numberOfRowsAffected == 1)? true:false;

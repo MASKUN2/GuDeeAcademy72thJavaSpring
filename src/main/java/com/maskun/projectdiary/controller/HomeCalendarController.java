@@ -2,7 +2,7 @@ package com.maskun.projectdiary.controller;
 
 import com.maskun.projectdiary.service.HomeCalenderService;
 import com.maskun.projectdiary.vo.dto.HomeCalendar;
-import com.maskun.projectdiary.vo.domain.Member;
+import com.maskun.projectdiary.vo.domain.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +34,8 @@ public class HomeCalendarController {
     public String home(@PathVariable YearMonth yearMonth, HttpSession session, Model model){
 
         log.debug(" 입력된 yearMonth = {}", yearMonth.toString());
-        Member memberLoggedIn = (Member)session.getAttribute("memberLoggedIn");
-        HomeCalendar homeCalendar = homeCalenderService.getHomeCalendar(yearMonth, memberLoggedIn);
+        User user = (User)session.getAttribute("loginUser");
+        HomeCalendar homeCalendar = homeCalenderService.getHomeCalendar(yearMonth, user);
         model.addAttribute("homeCalendar", homeCalendar);
 
         return "home";

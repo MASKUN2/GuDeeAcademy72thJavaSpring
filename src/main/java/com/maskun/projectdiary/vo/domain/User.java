@@ -6,10 +6,9 @@ import lombok.Data;
 import java.time.LocalDateTime;
 @Builder
 @Data
-public class Member {
-    private int memberNo; //PK
-    private int memberLevel;
-    private String memberId;
-    private String memberPw;
+public class User {
+    private String userId;
+    private String userPw;
+    private int userLevel;
     private LocalDateTime createdate;
 }

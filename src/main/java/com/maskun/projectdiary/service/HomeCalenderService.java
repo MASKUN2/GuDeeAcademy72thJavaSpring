@@ -3,15 +3,16 @@ package com.maskun.projectdiary.service;
 import com.maskun.projectdiary.externalApiRequest.HolidayApi;
 import com.maskun.projectdiary.externalApiRequest.HolidayApiVo;
 import com.maskun.projectdiary.mapper.HomeCalendarMapper;
+import com.maskun.projectdiary.vo.domain.User;
 import com.maskun.projectdiary.vo.dto.DateInfo;
 import com.maskun.projectdiary.vo.dto.HomeCalendar;
-import com.maskun.projectdiary.vo.domain.Member;
 import com.maskun.projectdiary.vo.domain.Memo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -30,10 +31,10 @@ public class HomeCalenderService {
     /**
      * 원하는 달의 달력을 가져옵니다.
      * @param yearMonth yyyy-mm형식의 String
-     * @param member session의 로그인된 member
+     * @param user session의 로그인된 member
      * @return Homcalendar 객체
      */
-    public HomeCalendar getHomeCalendar(YearMonth yearMonth, Member member) {
+    public HomeCalendar getHomeCalendar(YearMonth yearMonth, User user) {
         HomeCalendar homeCalendar = new HomeCalendar(yearMonth);
         List<DateInfo> dateInfoList  = homeCalendar.getDateInfoList();
         try {
@@ -49,13 +50,12 @@ public class HomeCalenderService {
             log.debug("휴일 프로세싱 문제가 발생했습니다. 휴일 정보를 제외하고 계속해서 캘린더를 생성합니다.");
         }
 
-        if(member != null){
+        if(user != null){
             try {
-                String memberId = member.getMemberId();
-                List<Memo> monthMemoList = homeCalendarMapper.selectMonthMemoList(memberId,yearMonth);
+                List<Memo> monthMemoList = homeCalendarMapper.selectMonthMemoList(user,yearMonth);
                 monthMemoList.forEach(memo -> {
-                    int dateIndex = memo.getDateNumber();
-                    dateInfoList.stream().filter(d -> d.getDayOfMonth() == dateIndex).findFirst()
+                    LocalDate memoDate = memo.getMemoDate();
+                    dateInfoList.stream().filter(d -> d.getLocalDate() == memoDate).findFirst()
                                 .ifPresent(d -> d.addMemo(memo));
                 });
             }catch (Exception e){

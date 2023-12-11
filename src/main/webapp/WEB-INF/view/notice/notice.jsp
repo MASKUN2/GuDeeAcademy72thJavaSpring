@@ -51,7 +51,7 @@
                             <div class="m-3">
                                 <span name="commentNo" hidden="hidden">${comment.commentNo}</span>
                                 <c:choose>
-                                <c:when test="${comment.isSecret == true && (comment.author ne memberLoggedIn.memberId && memberLoggedIn.memberLevel != 1)}">
+                                <c:when test="${comment.isSecret == true && (comment.author ne userLoggedIn.memberId && userLoggedIn.memberLevel != 1)}">
                                     🔏 SECRET
                                 </c:when>
                                 <c:otherwise>
@@ -61,7 +61,7 @@
                                 </c:choose>
                             </div>
                             <div align="right" class="mx-3" >
-                                <c:if test="${comment.author eq memberLoggedIn.memberId || memberLoggedIn.memberLevel == 1}">
+                                <c:if test="${comment.author eq userLoggedIn.memberId || userLoggedIn.memberLevel == 1}">
                                 <button name="btnCommentEdit" class="btn">✏️</button>
                                 <button name="btnCommentDelete" class="btn">❌</button>
                                 </c:if>
