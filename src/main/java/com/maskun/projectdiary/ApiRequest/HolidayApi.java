@@ -1,4 +1,4 @@
-package com.maskun.projectdiary.externalApiRequest;
+package com.maskun.projectdiary.ApiRequest;
 
 
 import java.io.IOException;

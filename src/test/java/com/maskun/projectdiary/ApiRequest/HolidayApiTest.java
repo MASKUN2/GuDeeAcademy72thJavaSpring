@@ -1,4 +1,4 @@
-package com.maskun.projectdiary.externalApiRequest;
+package com.maskun.projectdiary.ApiRequest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.time.YearMonth;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
 class HolidayApiTest {

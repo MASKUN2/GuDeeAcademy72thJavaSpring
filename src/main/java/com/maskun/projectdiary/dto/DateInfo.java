@@ -1,6 +1,6 @@
-package com.maskun.projectdiary.vo.dto;
+package com.maskun.projectdiary.dto;
 
-import com.maskun.projectdiary.vo.domain.Memo;
+import com.maskun.projectdiary.domain.entity.Memo;
 import lombok.Data;
 
 import java.time.DayOfWeek;

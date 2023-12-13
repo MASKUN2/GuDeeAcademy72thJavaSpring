@@ -1,8 +1,8 @@
 package com.maskun.projectdiary.controller;
 
 import com.maskun.projectdiary.service.NoticeService;
-import com.maskun.projectdiary.vo.domain.Notice;
-import com.maskun.projectdiary.vo.domain.NoticeComment;
+import com.maskun.projectdiary.domain.entity.Notice;
+import com.maskun.projectdiary.domain.entity.NoticeComment;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ public class NoticeController {
     public String getNoticeAddForm(HttpSession session){
         return "notice/noticeAddForm";
     }
-
+    /*
     @PostMapping
     public String addNotice(HttpSession session, Notice notice) {
         boolean result = service.addNotice(session, notice);
@@ -46,6 +46,7 @@ public class NoticeController {
             return "notice/noticeAddForm";
         }
     }
+
     @GetMapping("/{noticeNo}")
     public String getNotice(@PathVariable Integer noticeNo, Model model){
         Notice notice = service.getNotice(noticeNo);
@@ -55,7 +56,7 @@ public class NoticeController {
         model.addAttribute("notice", notice);
         return "notice/notice";
     }
-
+    /*
     @PostMapping("/comment")
     public String addComment(HttpSession session, NoticeComment comment){
         boolean result = service.addNoticeComment(session, comment);
@@ -75,4 +76,5 @@ public class NoticeController {
         boolean result = service.deleteNoticeComment(comment , session);
         return (result == true)? new ResponseEntity(HttpStatus.OK) : new ResponseEntity(HttpStatus.NOT_FOUND);
     }
+     */
 }

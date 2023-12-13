@@ -1,15 +1,23 @@
 package com.maskun.projectdiary.controller;
 
 import com.maskun.projectdiary.service.UserService;
-import com.maskun.projectdiary.vo.domain.User;
-import com.maskun.projectdiary.vo.dto.UserAddDto;
-import com.maskun.projectdiary.vo.dto.UserLoginDto;
+import com.maskun.projectdiary.domain.entity.User;
+import com.maskun.projectdiary.dto.UserAddRequestDto;
+import com.maskun.projectdiary.dto.UserLoginRequestDto;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,8 +30,8 @@ public class UserController {
         return "/user/login";
     }
     @PostMapping("/user/login")
-    public String doLogin(@ModelAttribute UserLoginDto userLoginDto, HttpSession httpSession){
-        User userFound = userService.doLogin(userLoginDto);
+    public String doLogin(String userId, String userPw, HttpSession httpSession){
+        User userFound = userService.doLogin(userId, userPw);
         if(userFound != null){
             httpSession.setAttribute("loginUser", userFound);
             return "redirect:/home";
@@ -38,10 +46,18 @@ public class UserController {
     }
     @GetMapping("/user/add")
     public String getUserAddForm(){
-        return "/user/AddForm";
+        return "/user/addForm";
     }
     @PostMapping("user/add")
-    public String addMember(@ModelAttribute UserAddDto userAddDto){
+    public String addMember(@Valid @ModelAttribute UserAddRequestDto userAddDto, Errors errors, Model model){
+        if(errors.hasErrors()){
+            log.debug("밸리데이션에러");
+            Map<String,String> fieldErrorMap = errors.getFieldErrors().stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+            model.addAttribute("fieldErrorMap",fieldErrorMap);
+            return "/user/addForm";
+        }else if (!userAddDto.getPw().equals(userAddDto.getPwCheck())){
+
+        }
         boolean isSuccess = userService.addUser(userAddDto);
         if(isSuccess){
         return "/home";

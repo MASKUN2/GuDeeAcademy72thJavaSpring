@@ -1,9 +1,9 @@
 package com.maskun.projectdiary.service;
 
 import com.maskun.projectdiary.mapper.NoticeMapper;
-import com.maskun.projectdiary.vo.domain.User;
-import com.maskun.projectdiary.vo.domain.Notice;
-import com.maskun.projectdiary.vo.domain.NoticeComment;
+import com.maskun.projectdiary.domain.entity.User;
+import com.maskun.projectdiary.domain.entity.Notice;
+import com.maskun.projectdiary.domain.entity.NoticeComment;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class NoticeService {
         noticeFound.setNoticeCommentList(commentList);
         return noticeFound;
     }
-
+    /*
     @Transactional
     public boolean addNotice(HttpSession session, Notice notice) {
         User user = (User) session.getAttribute("loginUser");
@@ -100,6 +100,6 @@ public class NoticeService {
                 return false;
             }
         }
-    }
+    */
 }
 

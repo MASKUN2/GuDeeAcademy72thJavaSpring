@@ -1,12 +1,12 @@
 package com.maskun.projectdiary.service;
 
-import com.maskun.projectdiary.externalApiRequest.HolidayApi;
-import com.maskun.projectdiary.externalApiRequest.HolidayApiVo;
+import com.maskun.projectdiary.ApiRequest.HolidayApi;
+import com.maskun.projectdiary.ApiRequest.HolidayApiVo;
 import com.maskun.projectdiary.mapper.HomeCalendarMapper;
-import com.maskun.projectdiary.vo.domain.User;
-import com.maskun.projectdiary.vo.dto.DateInfo;
-import com.maskun.projectdiary.vo.dto.HomeCalendar;
-import com.maskun.projectdiary.vo.domain.Memo;
+import com.maskun.projectdiary.domain.entity.User;
+import com.maskun.projectdiary.dto.DateInfo;
+import com.maskun.projectdiary.dto.HomeCalendar;
+import com.maskun.projectdiary.domain.entity.Memo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

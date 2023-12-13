@@ -1,4 +1,4 @@
-package com.maskun.projectdiary.externalApiRequest;
+package com.maskun.projectdiary.ApiRequest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

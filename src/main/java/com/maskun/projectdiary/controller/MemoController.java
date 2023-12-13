@@ -2,10 +2,11 @@ package com.maskun.projectdiary.controller;
 
 import com.maskun.projectdiary.annotation.LoginUser;
 import com.maskun.projectdiary.service.MemoService;
-import com.maskun.projectdiary.vo.domain.User;
-import com.maskun.projectdiary.vo.domain.Memo;
-import com.maskun.projectdiary.vo.dto.ResponseMessage;
-import com.maskun.projectdiary.vo.dto.MemoAddDto;
+import com.maskun.projectdiary.domain.entity.User;
+import com.maskun.projectdiary.domain.entity.Memo;
+import com.maskun.projectdiary.dto.MemoSetRequestDto;
+import com.maskun.projectdiary.dto.ResponseMessage;
+import com.maskun.projectdiary.dto.MemoAddRequestDto;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,27 +28,27 @@ import java.util.Map;
 public class MemoController {
     private final MemoService memoService;
 
-    @GetMapping("/memo/{localDate}")
-    public String getDateMemoList(@PathVariable LocalDate localDate, HttpSession session, Model model){
-        User user = (User) session.getAttribute("loginUser");
-        List<Memo> memoList = memoService.getDateMemoList(localDate, user);
+    @GetMapping("/memo/{date}")
+    public String getDateMemoList(@PathVariable LocalDate date, @LoginUser User user, Model model){
+        String userId = user.getUserId();
+        List<Memo> memoList = memoService.getDateMemoList(date,userId);
         model.addAttribute("memoList", memoList);
-        model.addAttribute("date", localDate);
-        model.addAttribute("yearMonth", YearMonth.from(localDate));
+        model.addAttribute("date", date);
+        model.addAttribute("yearMonth", YearMonth.from(date));
         return "memo/dateMemo";
     }
 
     @PostMapping("/memo/{localDate}")
-    public ResponseEntity<ResponseMessage> addMemo(@Valid @RequestBody MemoAddDto memoAddDto, @LoginUser User user, Errors errors){
-        log.debug("user={} , memoContent={}", user, memoAddDto);
-        boolean isSuccess = memoService.addMemo(user, memoAddDto);
+    public ResponseEntity<ResponseMessage> addMemo(@Valid @RequestBody MemoAddRequestDto dto, @LoginUser User user, Errors errors){
+        log.debug("dto = {}", dto);
+        boolean isSuccess = memoService.addMemo(user, dto);
         log.debug("isSuccess : {}",isSuccess);
         return (isSuccess)?
                 new ResponseEntity<ResponseMessage>(HttpStatus.OK): new ResponseEntity<ResponseMessage>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
+    /*
     @PutMapping("/schedule/{memoNo}")
-    public ResponseEntity modifyMemo(@PathVariable int memoNo, @RequestBody Map<String,String> memoMap){
+    public ResponseEntity setMemo(@PathVariable int memoNo, @RequestBody MemoSetRequestDto memoSetDto){
         String memo = memoMap.get("memo");
         log.debug("받은 값 : memoNo:{}, memo:{}",memoNo, memoMap.get("memo"));
         boolean isSuccess = memoService.setMemo(memoNo, memo);
@@ -56,7 +56,7 @@ public class MemoController {
         return (isSuccess)?
                 new ResponseEntity(HttpStatus.OK): new ResponseEntity(HttpStatus.NOT_FOUND);
     }
-
+    */
     @DeleteMapping("/schedule/{memoNo}")
     public ResponseEntity removeMemo(@PathVariable int memoNo){
         log.debug("삭제요청 memoNo = {}",memoNo);

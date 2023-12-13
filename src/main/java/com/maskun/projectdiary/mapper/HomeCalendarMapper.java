@@ -1,7 +1,7 @@
 package com.maskun.projectdiary.mapper;
 
-import com.maskun.projectdiary.vo.domain.Memo;
-import com.maskun.projectdiary.vo.domain.User;
+import com.maskun.projectdiary.domain.entity.Memo;
+import com.maskun.projectdiary.domain.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

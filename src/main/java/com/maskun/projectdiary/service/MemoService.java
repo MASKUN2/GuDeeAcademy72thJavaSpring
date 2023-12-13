@@ -1,9 +1,9 @@
 package com.maskun.projectdiary.service;
 
 import com.maskun.projectdiary.mapper.MemoMapper;
-import com.maskun.projectdiary.vo.domain.User;
-import com.maskun.projectdiary.vo.domain.Memo;
-import com.maskun.projectdiary.vo.dto.MemoAddDto;
+import com.maskun.projectdiary.domain.entity.User;
+import com.maskun.projectdiary.domain.entity.Memo;
+import com.maskun.projectdiary.dto.RequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,8 +22,8 @@ public class MemoService {
     /**
      * 해당 날짜의 메모리스트를 가져옵니다.
      */
-    public List<Memo> getDateMemoList(LocalDate localDate, User user) {
-        List<Memo> dateMemoList = memoMapper.selectDateMemoList(user, localDate);
+    public List<Memo> getDateMemoList(LocalDate date, String userId) {
+        List<Memo> dateMemoList = memoMapper.selectDateMemoList(date, userId);
         return dateMemoList;
     }
 
@@ -48,9 +48,9 @@ public class MemoService {
      * 메모를 추가합니다.
      */
     @Transactional
-    public boolean addMemo(User user, MemoAddDto memoAddDto) {
-        Memo memo = memoAddDto.toDomainEntity();
-        int numberOfRowsAffected = memoMapper.insertMemo(memberId,memo);
+    public boolean addMemo(User user, RequestDto<Memo> dto) {
+        Memo memo = dto.toServiceDto();
+        int numberOfRowsAffected = memoMapper.insertMemo(user,memo);
         return (numberOfRowsAffected == 1)? true:false;
     }
 }

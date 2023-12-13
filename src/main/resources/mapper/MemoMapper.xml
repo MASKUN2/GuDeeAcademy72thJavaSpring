@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.maskun.projectdiary.mapper.MemoMapper">
-    <select id="selectDateMemoList" parameterType="java.util.Map" resultType="com.maskun.projectdiary.vo.domain.Memo">
+    <select id="selectDateMemoList" parameterType="java.util.Map" resultType="com.maskun.projectdiary.domain.entity.Memo">
         SELECT
             memo_date memoDate,
             memo_content memoContent,
             memo_no memoNo
         FROM `memo`
-        WHERE member_id = #{memberId} AND
+        WHERE user_id = #{userId} AND
               memo_date = #{date}
         ORDER BY createdate
     </select>
@@ -22,8 +22,8 @@
     </delete>
     <insert id="insertMemo" parameterType="java.util.Map">
         INSERT INTO memo
-            (member_id, memo_date, memo_content)
+            (user_id, memo_date, memo_content)
         VALUES
-            (#{memberId},#{date},#{memoContent})
+            (#{user.userId},#{memo.memoDate},#{memo.memoContent})
     </insert>
 </mapper>

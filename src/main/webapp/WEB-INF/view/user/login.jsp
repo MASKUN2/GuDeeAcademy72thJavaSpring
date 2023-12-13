@@ -13,8 +13,8 @@
     <jsp:include page="/WEB-INF/view/menu.jsp"/>
     <h1>LOGIN</h1>
     <form method="post" class="form-control">
-            user ID : <input name="memberId" class="form-control">
-            user password : <input name="memberPw" class="form-control">
+            user ID : <input name="userId" class="form-control">
+            user password : <input name="userPw" class="form-control">
         <button class="btn" type="submit">login</button>
     </form>
 </div>

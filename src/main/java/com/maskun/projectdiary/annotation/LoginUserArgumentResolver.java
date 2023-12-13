@@ -1,8 +1,6 @@
 package com.maskun.projectdiary.annotation;
 
-import com.maskun.projectdiary.vo.domain.User;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+import com.maskun.projectdiary.domain.entity.User;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;

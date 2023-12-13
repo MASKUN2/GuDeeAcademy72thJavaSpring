@@ -1,4 +1,4 @@
-package com.maskun.projectdiary.vo.dto;
+package com.maskun.projectdiary.dto;
 
 import lombok.Builder;
 import lombok.Data;

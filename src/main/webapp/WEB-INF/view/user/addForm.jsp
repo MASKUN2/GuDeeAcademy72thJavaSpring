@@ -13,8 +13,9 @@
     <jsp:include page="/WEB-INF/view/menu.jsp"/>
     <h1>REGISTER</h1>
     <form method="post" class="form-control">
-            user ID : <input name="memberId" class="form-control">
-            user password : <input name="memberPw" class="form-control">
+        user ID : <input name="id" class="form-control" placeholder="${fieldErrorMap['id']}">
+        user password : <input name="pw" class="form-control" placeholder="${fieldErrorMap['pw']}">
+        user password check : <input name="pwCheck" class="form-control" placeholder="${fieldErrorMap['pwCheck']}">
         <button class="btn" type="submit">register</button>
     </form>
 </div>

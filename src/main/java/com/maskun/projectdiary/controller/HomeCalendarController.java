@@ -1,8 +1,8 @@
 package com.maskun.projectdiary.controller;
 
 import com.maskun.projectdiary.service.HomeCalenderService;
-import com.maskun.projectdiary.vo.dto.HomeCalendar;
-import com.maskun.projectdiary.vo.domain.User;
+import com.maskun.projectdiary.dto.HomeCalendar;
+import com.maskun.projectdiary.domain.entity.User;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package com.maskun.projectdiary.service;
 
-import com.maskun.projectdiary.vo.domain.User;
-import com.maskun.projectdiary.vo.dto.HomeCalendar;
+import com.maskun.projectdiary.domain.entity.User;
+import com.maskun.projectdiary.dto.HomeCalendar;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
