@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,9 +14,18 @@
     <jsp:include page="/WEB-INF/view/menu.jsp"/>
     <h1>REGISTER</h1>
     <form method="post" class="form-control">
-        user ID : <input name="id" class="form-control" placeholder="${fieldErrorMap['id']}">
-        user password : <input name="pw" class="form-control" placeholder="${fieldErrorMap['pw']}">
-        user password check : <input name="pwCheck" class="form-control" placeholder="${fieldErrorMap['pwCheck']}">
+        <div>
+            <span style="color: brown">
+            <spring:hasBindErrors name="userAddRequestDto">
+                <c:forEach var="fieldError" items="${errors.fieldErrors}">
+                    ${fieldError.defaultMessage}<br>
+                </c:forEach>
+            </spring:hasBindErrors>
+            </span>
+        </div>
+        user ID : <input name="id" class="form-control" value="${userAddRequestDto.id}">
+        user password : <input name="pw" class="form-control" type="password">
+        user password check : <input name="pwCheck" class="form-control" type="password">
         <button class="btn" type="submit">register</button>
     </form>
 </div>

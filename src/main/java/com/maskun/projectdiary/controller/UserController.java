@@ -10,10 +10,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collector;
@@ -49,21 +51,17 @@ public class UserController {
         return "/user/addForm";
     }
     @PostMapping("user/add")
-    public String addMember(@Valid @ModelAttribute UserAddRequestDto userAddDto, Errors errors, Model model){
-        if(errors.hasErrors()){
-            log.debug("밸리데이션에러");
-            Map<String,String> fieldErrorMap = errors.getFieldErrors().stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
-            model.addAttribute("fieldErrorMap",fieldErrorMap);
+    public String addMember(@Valid @ModelAttribute UserAddRequestDto dto, Errors errors, BindingResult bindingResult){
+        if (!dto.getPw().equals(dto.getPwCheck())){
+            log.debug("비밀번호확인 불일치에러");
+            bindingResult.addError(new FieldError("userAddDto", "pwCheck", "비밀번호 확인이 일치하지 않습니다."));
+        }
+        if(bindingResult.hasErrors()){
+            log.debug("밸리데이션에러, 가입화면으로 리다이렉트됩니다.");
             return "/user/addForm";
-        }else if (!userAddDto.getPw().equals(userAddDto.getPwCheck())){
-
         }
-        boolean isSuccess = userService.addUser(userAddDto);
-        if(isSuccess){
-        return "/home";
-        }else {
-            return "/user/add";
-        }
+        boolean isSuccess = userService.addUser(dto.toServiceDto());
+        return(isSuccess)? "redirect:/user/login":"/user/add";
     }
 
 }

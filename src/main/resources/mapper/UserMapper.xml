@@ -9,7 +9,7 @@
         from user
         where user_id = #{userId} AND user_pw = PASSWORD(#{userPw})
     </select>
-    <insert id="insertUser" parameterType="com.maskun.projectdiary.domain.entity.User">
+    <insert id="insertUser" parameterType="java.util.Map">
         INSERT INTO user(user_id, user_pw)
         VALUES (#{userId}, PASSWORD(#{userPw}))
     </insert>
