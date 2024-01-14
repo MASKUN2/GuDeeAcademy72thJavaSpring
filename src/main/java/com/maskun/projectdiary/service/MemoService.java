@@ -1,4 +1,6 @@
-package com.maskun.projectdiary.memo;
+package com.maskun.projectdiary.service;
+
+import com.maskun.projectdiary.domain.memo.Memo;
 
 import java.time.LocalDate;
 import java.util.List;

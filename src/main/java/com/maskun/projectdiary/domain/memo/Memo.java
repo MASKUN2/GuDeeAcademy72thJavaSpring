@@ -1,4 +1,4 @@
-package com.maskun.projectdiary.memo;
+package com.maskun.projectdiary.domain.memo;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

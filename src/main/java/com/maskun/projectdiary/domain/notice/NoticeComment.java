@@ -1,4 +1,4 @@
-package com.maskun.projectdiary.domain.entity;
+package com.maskun.projectdiary.domain.notice;
 
 import lombok.Data;
 

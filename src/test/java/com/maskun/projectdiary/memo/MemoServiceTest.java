@@ -1,5 +1,7 @@
 package com.maskun.projectdiary.memo;
 
+import com.maskun.projectdiary.service.MemoService;
+import com.maskun.projectdiary.domain.memo.Memo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,5 +1,6 @@
-package com.maskun.projectdiary.memo;
+package com.maskun.projectdiary.domain.memo;
 
+import com.maskun.projectdiary.domain.memo.Memo;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
