@@ -1,4 +1,4 @@
-package com.maskun.projectdiary.ApiRequest;
+package com.maskun.projectdiary.domain.holiday;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

@@ -1,4 +1,4 @@
-package com.maskun.projectdiary.configuration;
+package com.maskun.projectdiary.core.configuration;
 
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;

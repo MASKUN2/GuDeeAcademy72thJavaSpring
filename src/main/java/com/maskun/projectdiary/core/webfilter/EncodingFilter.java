@@ -1,4 +1,4 @@
-package com.maskun.projectdiary.filter;
+package com.maskun.projectdiary.core.webfilter;
 
 import jakarta.servlet.*;
 import lombok.extern.slf4j.Slf4j;

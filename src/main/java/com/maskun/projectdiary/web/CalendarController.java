@@ -13,7 +13,6 @@ public class CalendarController {
     private final CalendarService calendarService;
     @GetMapping("/calendar/{yearMonth}")
     public String getCalendar(@PathVariable YearMonth yearMonth){
-        MyCalendar calendar = calendarService.getCalendar(yearMonth);
         return "home";
     }
 }

@@ -1,5 +1,7 @@
 package com.maskun.projectdiary.ApiRequest;
 
+import com.maskun.projectdiary.domain.holiday.HolidayApi;
+import com.maskun.projectdiary.domain.holiday.HolidayApiVo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

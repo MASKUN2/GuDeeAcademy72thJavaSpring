@@ -1,4 +1,4 @@
-package com.maskun.projectdiary.ApiRequest;
+package com.maskun.projectdiary.domain.holiday;
 
 
 import java.io.IOException;
