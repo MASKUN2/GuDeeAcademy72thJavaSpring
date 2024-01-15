@@ -1,10 +1,12 @@
 package com.maskun.projectdiary.web.dto;
 
 import com.maskun.projectdiary.domain.user.User;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.time.YearMonth;
 import java.util.List;
+@Getter
 @ToString
 public class CalendarVo {
     private final User user;

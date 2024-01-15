@@ -14,7 +14,6 @@ public class HolidayApiVo {
 	private boolean isHoliday;
 	private LocalDate locdate;
 	private String seq;
-	private LocalDate localDate;
 
 	public void setIsHoliday(String YorN){
 		if(YorN.equals("Y")){
