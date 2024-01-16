@@ -1,6 +1,5 @@
 package com.maskun.projectdiary.domain.memo;
 
-import com.maskun.projectdiary.domain.memo.Memo;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +8,8 @@ import java.util.List;
 @Repository
 public interface MemoRepository extends CrudRepository<Memo,Long> {
     List<Memo> findByMemoDate(LocalDate date);
+
+    List<Memo> findByMemoDateBetween(LocalDate startDate, LocalDate endDate);
 
     Memo findMemoByMemoNo(Long memoNo);
 }
