@@ -31,7 +31,10 @@
     </div>
     <div class="row">
         <th:block th:each="dateVo : ${calendar.dateVoList}" th:with="day = ${dateVo.date.dayOfWeek.name}">
-        <div class="col calendar" th:text="${dateVo.date.monthValue eq calendar.yearMonth.monthValue}?${dateVo.date.dayOfMonth} +'   '+${dateVo.dateName?:''}" th:style="${day eq 'SUNDAY'}? 'color: red;' : (${day eq 'SATURDAY'}? 'color: blue;')"/>
+            <div class="col calendar" th:style="${day eq 'SUNDAY'}? 'color: red;' : (${day eq 'SATURDAY'}? 'color: blue;')">
+                <span th:text="${dateVo.date.monthValue eq calendar.yearMonth.monthValue}?${dateVo.date.dayOfMonth} +'   '+${dateVo.dateName?:''}"></span>
+                <div th:each="memo : ${dateVo.memoList}" th:text="${memo.memoContent}"></div>
+            </div>
             <th:block th:if="${dateVoStat.count % 7 == 0}">
                 <th:block th:utext="'</div><div class=\'row\'>'"/>
             </th:block>
