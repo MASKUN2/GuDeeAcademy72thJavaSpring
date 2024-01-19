@@ -1,6 +1,7 @@
 package com.maskun.projectdiary.web;
 
 import com.maskun.projectdiary.service.CalendarService;
+import com.maskun.projectdiary.web.dto.LoginDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +16,7 @@ public class CalendarController {
     @GetMapping("/calendar/{yearMonth}")
     public String getCalendar(@PathVariable YearMonth yearMonth , Model model){
         model.addAttribute("calendar", calendarService.getCalendar(yearMonth));
+        model.addAttribute("loginDto", new LoginDto(null, null));
         return "calendar";
     }
 }

@@ -5,12 +5,13 @@
     <title>Title</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
         .calendar {
             border: 1px solid lavender;
             padding: 10px;
             height: 160px;
-            font-size: 18px;
+            font-size: 15px;
             color: black;
             font-weight: bold;
         }
@@ -18,8 +19,10 @@
 </head>
 <body>
 <div class="container my-5">
+    <div th:replace="~{inc :: navigator}"></div>
     <h1 th:text="${calendar.yearMonth}"/>
-
+    <a th:href="@{/calendar/{yearMonth}(yearMonth = ${calendar.getYearMonth().minusMonths(1)})}"> 이전 달</a>
+    <a th:href="@{/calendar/{yearMonth}(yearMonth = ${calendar.getYearMonth().plusMonths(1)})}"> 다음 달</a>
     <div class="row">
         <div class="col calendar" style="height: 60px; color: red;"><h3>SU</h3></div>
         <div class="col calendar" style="height: 60px;"><h3>MO</h3></div>
@@ -31,15 +34,40 @@
     </div>
     <div class="row">
         <th:block th:each="dateVo : ${calendar.dateVoList}" th:with="day = ${dateVo.date.dayOfWeek.name}">
-            <div class="col calendar" th:style="${day eq 'SUNDAY'}? 'color: red;' : (${day eq 'SATURDAY'}? 'color: blue;')">
-                <span th:text="${dateVo.date.monthValue eq calendar.yearMonth.monthValue}?${dateVo.date.dayOfMonth} +'   '+${dateVo.dateName?:''}"></span>
-                <div th:each="memo : ${dateVo.memoList}" th:text="${memo.memoContent}"></div>
+            <div class="col calendar" th:style="${day eq 'SUNDAY' or dateVo.isHoliday eq true}? 'color: red;' : (${day eq 'SATURDAY'}? 'color: blue;')">
+                <th:block th:if="${dateVo.date.monthValue eq calendar.yearMonth.monthValue}">
+                    <span th:text="${dateVo.date.dayOfMonth}"/>
+                    <span th:text="${dateVo.dateName?:''}"/>
+                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#memoView" th:date="${dateVo.date}" onclick="memoViewFunction(this.getAttribute('date'))">✏️</button>
+                    <div th:each="memo : ${dateVo.getThreeMemos()}" th:text="'·'+${memo}"/>
+                </th:block>
             </div>
-            <th:block th:if="${dateVoStat.count % 7 == 0}">
-                <th:block th:utext="'</div><div class=\'row\'>'"/>
-            </th:block>
+            <th:block th:if="${dateVoStat.count % 7 == 0}" th:utext="'</div><div class=\'row\'>'"/>
         </th:block>
     </div>
+
+    <!--/* 메모 보기 시작*/-->
+    <div class="modal fade" id="memoView" tabindex="-1" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">메모</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/* 메모 보기 종료*/-->
 </div>
 </body>
+    <script>
+        function memoViewFunction(param) {
+            console.log(param);
+        }
+    </script>
 </html>

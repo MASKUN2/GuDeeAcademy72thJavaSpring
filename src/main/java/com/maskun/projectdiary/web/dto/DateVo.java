@@ -31,4 +31,22 @@ public class DateVo{
         }
         this.memoList.add(memo);
     }
+
+    /**
+     * @return 메모의 앞부분만 가져와 리스트로 반환합니다.
+     */
+    public List<String> getThreeMemos(){
+        if(memoList == null){
+            return null;
+        }
+        return memoList.stream()
+                .map(m->{
+                    try {
+                        return m.getMemoContent().substring(0,10);
+                    }catch (StringIndexOutOfBoundsException e){
+                        return m.getMemoContent();
+                    }
+                })
+                .limit(3).toList();
+    }
 }

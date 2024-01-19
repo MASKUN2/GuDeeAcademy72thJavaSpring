@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<header th:fragment="navigator">
+    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#loginModal" th:text="로그인"/>
+    <h2 th:if="${session.loginUser ne null}" th:text="|${session.loginUser.userId} 로그인되었습니다|"></h2>
+    <!-- Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">로그인</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" th:object="${loginDto}">
+                        <label>아이디</label>
+                        <input class="form-control" th:field="*{userId}">
+                        <label>비밀번호</label>
+                        <input class="form-control" type="password" th:field="*{userPw}">
+                        <button type="button" id="loginBtn" class="btn btn-primary">로그인</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">회원가입</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function (){
+            $('#loginBtn').click(login);
+        });
+
+        /*로그인 */
+        function login(){
+            let userId = $('#userId').val();
+            let userPw = $('#userPw').val();
+            $.ajax({
+                url: '/api/v1/user/login',
+                type: 'post',
+                data: {
+                    userId : userId,
+                    userPw : userPw
+                },
+                success: function (response) {
+                    window.location.reload();
+                    alert("로그인되었습니다")
+                },
+                error: function (error) {
+                    alert("로그인정보가 일치하지 않습니다")
+                }
+            });
+        }
+    </script>
+</header>
+</body>
+</html>

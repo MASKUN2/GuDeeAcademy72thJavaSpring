@@ -47,6 +47,7 @@ public class CalendarService {
                     Optional.ofNullable(dateVoMap.get(holiday.getLocdate().toString()))
                             .ifPresent(dateVo -> dateVo.setHoliday(holiday.getDateName()));
                 });
+
         //메모를 매핑하기
         getMonthMemoList(yearMonth).forEach(memo->{
             Optional.ofNullable(dateVoMap.get(memo.getMemoDate().toString()))
