@@ -7,7 +7,9 @@
 <body>
 
 <header th:fragment="navigator">
-    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#loginModal" th:text="로그인"/>
+    <button th:if="${session.loginUser eq null}" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#loginModal" th:text="로그인"/>
+    <button th:if="${session.loginUser ne null}" type="button" class="btn" onclick="window.location.href = '/logout'" th:text="로그아웃"/>
+
     <h2 th:if="${session.loginUser ne null}" th:text="|${session.loginUser.userId} 로그인되었습니다|"></h2>
     <!-- Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

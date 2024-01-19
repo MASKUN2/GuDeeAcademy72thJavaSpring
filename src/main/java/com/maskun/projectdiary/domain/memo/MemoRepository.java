@@ -9,7 +9,7 @@ import java.util.List;
 public interface MemoRepository extends CrudRepository<Memo,Long> {
     List<Memo> findByMemoDate(LocalDate date);
 
-    List<Memo> findByMemoDateBetween(LocalDate startDate, LocalDate endDate);
+    List<Memo> findByMemoDateBetweenAndUserId(LocalDate memoDate, LocalDate memoDate2, String userId);
 
     Memo findMemoByMemoNo(Long memoNo);
 }

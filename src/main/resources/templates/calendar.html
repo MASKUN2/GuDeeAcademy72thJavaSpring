@@ -38,7 +38,7 @@
                 <th:block th:if="${dateVo.date.monthValue eq calendar.yearMonth.monthValue}">
                     <span th:text="${dateVo.date.dayOfMonth}"/>
                     <span th:text="${dateVo.dateName?:''}"/>
-                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#memoView" th:date="${dateVo.date}" onclick="memoViewFunction(this.getAttribute('date'))">✏️</button>
+                    <button th:if="${session.loginUser ne null}" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#memoView" th:date="${dateVo.date}" onclick="memoViewFunction(this.getAttribute('date'))">✏️</button>
                     <div th:each="memo : ${dateVo.getThreeMemos()}" th:text="'·'+${memo}"/>
                 </th:block>
             </div>
