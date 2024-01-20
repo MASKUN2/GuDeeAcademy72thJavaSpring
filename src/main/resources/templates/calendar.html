@@ -38,8 +38,9 @@
                 <th:block th:if="${dateVo.date.monthValue eq calendar.yearMonth.monthValue}">
                     <span th:text="${dateVo.date.dayOfMonth}"/>
                     <span th:text="${dateVo.dateName?:''}"/>
-                    <button th:if="${session.loginUser ne null}" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#memoView" th:date="${dateVo.date}" onclick="memoViewFunction(this.getAttribute('date'))">✏️</button>
-                    <div th:each="memo : ${dateVo.getThreeMemos()}" th:text="'·'+${memo}"/>
+                    <span th:if="${T(java.time.LocalDate).now().equals(dateVo.date)}" th:text="오늘"/>
+                    <button th:if="${session.loginUser ne null}" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#memoView" th:date="${dateVo.date}" onclick="memoViewFunction(this.getAttribute('date'))" style="font-size: x-small">✏️</button>
+                    <div th:each="memo : ${dateVo.getThreeMemos()}" th:text="'·'+${memo}" style="font-weight: normal; font-size: small" />
                 </th:block>
             </div>
             <th:block th:if="${dateVoStat.count % 7 == 0}" th:utext="'</div><div class=\'row\'>'"/>
@@ -48,16 +49,20 @@
 
     <!--/* 메모 보기 시작*/-->
     <div class="modal fade" id="memoView" tabindex="-1" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">메모</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">메모 <span id="memoViewHead"></span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <table id="memoViewBody" width="100%">
 
+                    </table>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" id="memoViewAddBtn" class="btn" onclick="addEmptyMemoInView()">메모추가</button>
+                    <button type="button" id="memoViewSaveBtn" class="btn btn-primary" onclick="saveMemoInView()">수정</button>
                 </div>
             </div>
         </div>
@@ -66,8 +71,70 @@
 </div>
 </body>
     <script>
-        function memoViewFunction(param) {
-            console.log(param);
+        const memoViewBody = $('#memoViewBody');
+        // 메모뷰를 초기화합니다
+        function memoViewFunction(date) {
+            console.log(date);
+            $.ajax({
+                url: '/api/v1/memo/'+date,
+                type: 'get',
+                success: function (response) {
+                    memoViewBody.text(date);
+                    memoViewBody.html("");
+                    $(response).each(printMemos);
+                    $('#memoViewSaveBtn').attr('onclick','saveMemoInView(\''+date+'\')');
+                }
+            })
         }
+        // 메모뷰에 메모를 출력합니다
+        function printMemos(index, item){
+            let memoNo = item.memoNo;
+            let memoContent = item.memoContent;
+            let memoHtml = '<tr><td width="95%"><input class="form-control my-2" memo-no="'+memoNo+'" value="'+memoContent+'"></td><td><button type="button" class="btn my-2" onclick="deleteMemoInView(this)">🗑️</button></td></tr>';
+            memoViewBody.append(memoHtml);
+        }
+        // 메모를 메모뷰에서 삭제
+        function deleteMemoInView(btn){
+            $(btn).closest('tr').remove();
+        }
+        //빈 메모를 메모뷰에 추가
+        function addEmptyMemoInView(){
+            let emptyMemoHtml = '<tr><td width="95%"><input class="form-control my-2" memo-no="" value=""></td><td><button type="button" class="btn my-2" onclick="deleteMemoInView(this)">🗑️</button></td></tr>';
+            memoViewBody.append(emptyMemoHtml);
+        }
+        // 메모뷰 저장
+        function saveMemoInView(date) {
+            let memoListInView = [];
+            let inputTags = memoViewBody.find('input');
+            inputTags.each(function (index, item) {
+                let memoNo = $(item).attr('memo-no');
+                let value = $(item).val();
+                let memoObject = {
+                    memoNo: memoNo,
+                    memoContent: value
+                };
+                memoListInView.push(memoObject);
+            });
+            console.log(memoListInView);
+
+            memoSaveRequest(date,memoListInView);
+        }
+        // 메모 수정 ajax
+        function memoSaveRequest(date, memoList){
+            $.ajax({
+                url:'/api/v1/memo/'+date,
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(memoList),
+                success: function () {
+                    alert('메모가 수정되었습니다')
+                    window.location.reload();
+                },
+                error: function () {
+                    alert('메모 수정 실패')
+                }
+            });
+        }
+
     </script>
 </html>

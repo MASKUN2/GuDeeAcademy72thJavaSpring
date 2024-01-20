@@ -1,8 +1,8 @@
 package com.maskun.projectdiary.memo;
 
+import com.maskun.projectdiary.domain.memo.Memo;
 import com.maskun.projectdiary.domain.memo.MemoRepository;
 import com.maskun.projectdiary.service.MemoService;
-import com.maskun.projectdiary.domain.memo.Memo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +27,10 @@ class MemoServiceTest {
         List<Memo> memoList = memoService.findMemoList(date);
         memoList.forEach(System.out::println);
 
-        Memo memo = memoService.findMemoByNo(626L);
+        Memo memo = memoService.findMemoByNo(1000L);
         System.out.println(memo.toString());
-
-        List<Memo> memoList1 = memoRepository.findByMemoDateBetween(LocalDate.parse("2023-12-03"), LocalDate.parse("2023-12-04"));
+        List<Memo> memoList1 = memoRepository.findByMemoDateBetweenAndUserId(LocalDate.parse("2023-01-03"), LocalDate.parse("2023-12-04"), "goodee");
+        System.out.println(memoList1.size());
         memoList1.forEach(m -> log.info(m.toString()));
     }
 }
