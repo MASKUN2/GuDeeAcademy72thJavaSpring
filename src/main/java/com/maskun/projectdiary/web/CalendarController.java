@@ -23,4 +23,9 @@ public class CalendarController {
         model.addAttribute("loginDto", new LoginDto(null, null));
         return "calendar";
     }
+
+    @GetMapping("/")
+    public String getHome(){
+        return "redirect:/calendar/"+ YearMonth.now();
+    }
 }

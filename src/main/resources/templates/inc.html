@@ -9,7 +9,7 @@
 <header th:fragment="navigator" style="background-color: aliceblue" class="p-3">
     <h5 th:if="${session.loginUser ne null}" th:text="|${session.loginUser.userId} 로그인되었습니다|"></h5>
     <button th:if="${session.loginUser eq null}" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#loginModal" th:text="로그인"/>
-    <button th:if="${session.loginUser ne null}" type="button" class="btn btn-light" onclick="window.location.href = '/logout'; alert('로그아웃되었습니다.');" th:text="로그아웃"/>
+    <button th:if="${session.loginUser ne null}" type="button" class="btn btn-light" onclick="window.location.href = '/diary/logout'; alert('로그아웃되었습니다.');" th:text="로그아웃"/>
 
     <!-- Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -31,6 +31,9 @@
                     <button type="button" id="loginBtn" class="btn btn-primary">로그인</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">회원가입</button>
                 </div>
+                <div style="text-align: center;">
+                    <a id="testLoginAccount" href="#" >(둘러보기)로그인 계정</a>
+                </div>
             </div>
         </div>
     </div>
@@ -45,13 +48,17 @@
                 }
             });
         });
+        $('#testLoginAccount').click(function () {
+            $('#userId').val('goodee');
+            $('#userPw').val('1234');
+        })
 
         //로그인
         function login(){
             let userId = $('#userId').val();
             let userPw = $('#userPw').val();
             $.ajax({
-                url: '/api/v1/user/login',
+                url: '/diary/api/v1/user/login',
                 type: 'post',
                 data: {
                     userId : userId,

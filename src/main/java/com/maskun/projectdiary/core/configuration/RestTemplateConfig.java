@@ -8,7 +8,6 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
@@ -25,8 +24,8 @@ public class RestTemplateConfig {
     public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
         return restTemplateBuilder
                 .requestFactory(() -> new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()))
-                .setConnectTimeout(Duration.ofMillis(5000))
-                .setReadTimeout(Duration.ofMillis(5000))
+                .setConnectTimeout(Duration.ofMillis(3000))
+                .setReadTimeout(Duration.ofMillis(3000))
                 .additionalMessageConverters(new StringHttpMessageConverter(StandardCharsets.UTF_8))
                 .build();
     }

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>달력 다이어리</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -76,7 +76,7 @@
         function memoViewFunction(date) {
             console.log(date);
             $.ajax({
-                url: '/api/v1/memo/'+date,
+                url: '/diary/api/v1/memo/'+date,
                 type: 'get',
                 success: function (response) {
                     memoViewBody.text(date);
@@ -122,7 +122,7 @@
         // 메모 수정 ajax
         function memoSaveRequest(date, memoList){
             $.ajax({
-                url:'/api/v1/memo/'+date,
+                url:'/diary/api/v1/memo/'+date,
                 type: 'post',
                 contentType: 'application/json',
                 data: JSON.stringify(memoList),
