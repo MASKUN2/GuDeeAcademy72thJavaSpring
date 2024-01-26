@@ -76,7 +76,7 @@
         function memoViewFunction(date) {
             console.log(date);
             $.ajax({
-                url: '/diary/api/v1/memo/'+date,
+                url: '/api/v1/memo/'+date,
                 type: 'get',
                 success: function (response) {
                     memoViewBody.text(date);
@@ -122,7 +122,7 @@
         // 메모 수정 ajax
         function memoSaveRequest(date, memoList){
             $.ajax({
-                url:'/diary/api/v1/memo/'+date,
+                url:'/api/v1/memo/'+date,
                 type: 'post',
                 contentType: 'application/json',
                 data: JSON.stringify(memoList),
