@@ -1,17 +1,19 @@
 package com.maskun.projectdiary.web;
 
-import com.maskun.projectdiary.core.ResponseEntityGenerator;
 import com.maskun.projectdiary.domain.user.User;
 import com.maskun.projectdiary.service.MemoService;
 import com.maskun.projectdiary.web.dto.MemoSaveDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.springframework.http.ResponseEntity.*;
 
 /**
  * <p> 유저 메모 컨트롤러</p>
@@ -21,15 +23,14 @@ import java.util.List;
 @Controller
 public class MemoController {
     private final MemoService memoService;
-    private final ResponseEntityGenerator respEntityGenerator;
     @ResponseBody
     @GetMapping("/api/v1/memo/{date}")
     public ResponseEntity<Object> getMemoList(@PathVariable(name = "date")LocalDate date,
                                               @SessionAttribute(name = "loginUser", required = false)User user){
         if(user == null){
-            return respEntityGenerator.respUnAuth();
+            return status(HttpStatus.UNAUTHORIZED).build();
         }
-        return respEntityGenerator.respOr404(memoService.findUserMemoListByDate(user.getUserId(), date));
+        return ok().body(memoService.findUserMemoListByDate(user.getUserId(), date));
     }
 
     @ResponseBody
@@ -41,16 +42,16 @@ public class MemoController {
 
         //로그인 확인
         if(user == null){
-            return respEntityGenerator.respUnAuth();
+            return status(HttpStatus.UNAUTHORIZED).build();
         }
         //빈 요청데이터는 수행하지 않고 ok 리턴
         if(dtoList.isEmpty()){
-            return ResponseEntity.ok().build();
+            return ok().build();
         }
         //요청실행
         boolean isSuccess = memoService.updateUserDateMemo(user.getUserId(),date, dtoList);
 
-        return isSuccess? respEntityGenerator.ok() : respEntityGenerator.respInternalServerError("error");
+        return isSuccess? ok().build() : internalServerError().body("error");
 
     }
 

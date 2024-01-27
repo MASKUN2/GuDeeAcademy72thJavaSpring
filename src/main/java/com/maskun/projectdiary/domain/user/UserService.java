@@ -1,6 +1,7 @@
 package com.maskun.projectdiary.domain.user;
 
 import com.maskun.projectdiary.web.dto.LoginDto;
+import com.maskun.projectdiary.web.dto.UserRegisterReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,5 +17,8 @@ public class UserService {
     public User login(LoginDto loginReq){
         Optional<User> userOpt = userRepository.findUserByUserIdAndUserPw(loginReq.userId(), loginReq.userPw());
         return userOpt.orElse(null);
+    }
+
+    public void registerUser(UserRegisterReq req) {
     }
 }

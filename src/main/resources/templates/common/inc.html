@@ -1,45 +1,52 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 
-<header th:fragment="navigator" style="background-color: aliceblue" class="p-3">
-    <h5 th:if="${session.loginUser ne null}" th:text="|${session.loginUser.userId} 로그인되었습니다|"></h5>
-    <button th:if="${session.loginUser eq null}" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#loginModal" th:text="로그인"/>
-    <button th:if="${session.loginUser ne null}" type="button" class="btn btn-light" onclick="window.location.href = '/logout'; alert('로그아웃되었습니다.');" th:text="로그아웃"/>
+<header th:fragment="navigator" style="background-color: aliceblue" class="p-1 my-3">
+    <th:block th:if="${session.loginUser ne null}">
+        <h5 th:text="|${session.loginUser.userId} 로그인되었습니다|"></h5>
+        <button type="button" class="btn btn-light"
+                onclick="window.location.href = '/user/logout'; alert('로그아웃되었습니다.');" th:text="로그아웃"/>
+    </th:block>
+    <th:block th:if="${session.loginUser eq null}">
+        <button type="button" class="btn btn-light" data-bs-toggle="modal"
+                data-bs-target="#loginModal" th:text="로그인"/>
+        <a th:href="@{/user/register}" class="btn btn-light">회원가입</a>
+    </th:block>
+
 
     <!-- Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" >로그인</h5>
+                    <h5 class="modal-title">로그인</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" th:object="${loginDto}" id="loginForm">
+                    <form method="post" id="loginForm">
                         <label>아이디</label>
-                        <input class="form-control m-2" th:field="*{userId}">
+                        <input class="form-control m-2" id="userId" name="userId">
                         <label>비밀번호</label>
-                        <input class="form-control m-2" type="password" th:field="*{userPw}">
+                        <input class="form-control m-2" id="userPw" type="password" name="userPw">
                     </form>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer justify-content-center">
                     <button type="button" id="loginBtn" class="btn btn-primary">로그인</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">회원가입</button>
                 </div>
                 <div style="text-align: center;">
-                    <a id="testLoginAccount" href="#" >(둘러보기)로그인 계정</a>
+                    <a id="testLoginAccount" href="#">(둘러보기)로그인 계정</a>
                 </div>
             </div>
         </div>
     </div>
     <script>
         //초기화
-        $(document).ready(function (){
+        $(document).ready(function () {
             $('#loginBtn').click(login);
             $("#loginForm").keypress(function (key) {
                 //키가 Enter(13)인경우
@@ -54,15 +61,15 @@
         })
 
         //로그인
-        function login(){
+        function login() {
             let userId = $('#userId').val();
             let userPw = $('#userPw').val();
             $.ajax({
                 url: '/api/v1/user/login',
                 type: 'post',
                 data: {
-                    userId : userId,
-                    userPw : userPw
+                    userId: userId,
+                    userPw: userPw
                 },
                 success: function (response) {
                     window.location.reload();

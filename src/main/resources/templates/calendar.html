@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>달력 다이어리</title>
@@ -19,7 +19,7 @@
 </head>
 <body>
 <div class="container my-5">
-    <div th:replace="~{inc :: navigator}"></div>
+    <div th:replace="~{common/inc :: navigator}"></div>
     <h1 th:text="${calendar.yearMonth}"/>
     <a th:href="@{/calendar/{yearMonth}(yearMonth = ${calendar.getYearMonth().minusMonths(1)})}"> 이전 달</a>
     <a th:href="@{/calendar/{yearMonth}(yearMonth = ${calendar.getYearMonth().plusMonths(1)})}"> 다음 달</a>
