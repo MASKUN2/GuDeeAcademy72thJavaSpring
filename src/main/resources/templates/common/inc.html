@@ -9,8 +9,18 @@
 <header th:fragment="navigator" style="background-color: aliceblue" class="p-1 my-3">
     <th:block th:if="${session.loginUser ne null}">
         <h5 th:text="|${session.loginUser.userId} 로그인되었습니다|"></h5>
-        <button type="button" class="btn btn-outline-secondary"
-                onclick="window.location.href = '/user/logout'; alert('로그아웃되었습니다.');" th:text="로그아웃"/>
+        <div class="row">
+            <div class="col-8">
+                <button type="button" class="btn btn-outline-secondary"
+                        onclick="window.location.href = '/user/logout'; alert('로그아웃되었습니다.');" th:text="로그아웃"/>
+            </div>
+            <div class="col-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="memoSearchInputForm" placeholder="메모검색">
+                    <span class="btn btn-outline-light" type="button" id="memoSearchBtn">🔍</span>
+                </div>
+            </div>
+        </div>
     </th:block>
     <th:block th:if="${session.loginUser eq null}">
         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
@@ -79,6 +89,24 @@
                     alert("로그인정보가 일치하지 않습니다")
                 }
             });
+        }
+
+        $('#memoSearchInputForm').keypress(function (key) {
+            //키가 Enter(13)인경우 로그인시도
+            if (key.keyCode === 13) {
+                searchUserMemo();
+            }
+        });
+
+        $('#memoSearchBtn').click(searchUserMemo);
+        function searchUserMemo() {
+            let keyword = $('#memoSearchInputForm').val();
+            if (keyword.length < 1) {
+                alert("1자이상 입력하세요");
+                return;
+            }
+            window.location.replace('/memo' + '?keyword=' + keyword);
+
         }
     </script>
 </header>

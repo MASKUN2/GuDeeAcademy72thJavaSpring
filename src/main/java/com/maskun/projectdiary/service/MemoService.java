@@ -38,7 +38,6 @@ public class MemoService {
      * @param reqMemoList
      * @return
      */
-    //TODO 리팩토링
     @Transactional
     public boolean updateUserDateMemo(String userId, LocalDate date, List<MemoSaveDto> reqMemoList)throws IllegalArgumentException {
         //수정할 요청리스트 구분하기
@@ -65,6 +64,10 @@ public class MemoService {
         //완료하기
         return true;
 
+    }
+
+    public List<Memo> retrieveUserMemoByKeyword(String userId, String keyword) {
+        return memoRepository.findMemoByUserIdAndMemoContentContains(userId, keyword);
     }
 
     /** update 용 요청 객체만 추림. No가 null인 객체는 add 건이거나 garbage이므로 제외
@@ -117,5 +120,4 @@ public class MemoService {
         }
         memoRepository.deleteMemoByMemoNoIn(deletingNoList);
     }
-
 }

@@ -20,5 +20,7 @@ public interface MemoRepository extends CrudRepository<Memo,Long> {
 
     void deleteMemoByMemoNoIn(Collection<Long> memoNo);
 
+    List<Memo> findMemoByUserIdAndMemoContentContains(String userId, String keyword);
+
 
 }

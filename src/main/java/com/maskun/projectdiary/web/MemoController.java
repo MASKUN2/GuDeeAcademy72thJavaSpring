@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -53,6 +54,14 @@ public class MemoController {
 
         return isSuccess? ok().build() : internalServerError().body("error");
 
+    }
+
+    @GetMapping("/memo")
+    public String getMemoList(@SessionAttribute(name = "loginUser")User user,
+                              @RequestParam(name = "keyword")String keyword,
+                              Model model){
+        model.addAttribute("retrievedMemoList", memoService.retrieveUserMemoByKeyword(user.getUserId(), keyword));
+        return "memo";
     }
 
 

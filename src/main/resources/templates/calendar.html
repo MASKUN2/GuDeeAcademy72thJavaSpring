@@ -21,9 +21,9 @@
 <div class="container my-5">
     <div th:replace="~{common/inc :: navigator}"></div>
     <div class="d-flex justify-content-center">
-        <a th:href="@{/calendar/{yearMonth}(yearMonth = ${calendar.getYearMonth().minusMonths(1)})}" class="btn btn-outline-primary m-auto"><</a>
+        <a th:href="@{/calendar/{yearMonth}(yearMonth = ${calendar.getYearMonth().minusMonths(1)})}" class="btn btn-outline-secondary m-auto"><b><</b></a>
         <h1 th:text="${calendar.yearMonth}"/>
-        <a th:href="@{/calendar/{yearMonth}(yearMonth = ${calendar.getYearMonth().plusMonths(1)})}" class="btn btn-outline-primary m-auto">></a>
+        <a th:href="@{/calendar/{yearMonth}(yearMonth = ${calendar.getYearMonth().plusMonths(1)})}" class="btn btn-outline-secondary m-auto"><b>></b></a>
     </div>
     <div class="row">
         <div class="col calendar" style="height: 60px; color: red;"><h3>SU</h3></div>
@@ -41,7 +41,7 @@
                 <th:block th:if="${dateVo.date.monthValue eq calendar.yearMonth.monthValue}">
                     <span th:text="${dateVo.date.dayOfMonth}"/>
                     <span th:text="${dateVo.dateName?:''}"/>
-                    <span th:if="${T(java.time.LocalDate).now().equals(dateVo.date)}" th:text="오늘"/>
+                    <span th:if="${T(java.time.LocalDate).now().equals(dateVo.date)}" th:text="오늘" style="background-color: #fffa9e;"/>
                     <button th:if="${session.loginUser ne null}" type="button" class="btn" data-bs-toggle="modal"
                             data-bs-target="#memoView" th:date="${dateVo.date}"
                             onclick="memoViewFunction(this.getAttribute('date'))" style="font-size: x-small">✏️
