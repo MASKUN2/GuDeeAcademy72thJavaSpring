@@ -53,18 +53,21 @@ public class UserController {
     @PostMapping("/user/register")
     @ResponseBody
     public ResponseEntity<Object> RegisterUser(@Validated @RequestBody UserRegisterReq req, Errors errors, Model model){
+        //입력폼의 밸리데이션
         if(errors.hasErrors()){
             String errorMessage = errors.getAllErrors().stream()
                     .map(ObjectError::getDefaultMessage)
                     .collect(Collectors.joining("\n"));
             return badRequest().body(Map.of("serverMessage",errorMessage));
         }
+        //수행
         try {
             userService.registerUser(req);
         }catch (DuplicateUserIdException e){
-            return badRequest().body("사용불가능한 아이디입니다");
+            // 중복된 아이디
+            return badRequest().body(Map.of("serverMessage","사용불가능한 아이디입니다"));
         }catch (Exception e){
-            return internalServerError().body("회원 가입에 실패했습니다. 관리자에게 문의하세요");
+            return internalServerError().body(Map.of("serverMessage","회원 가입에 실패했습니다. 관리자에게 문의하세요"));
         }
         return ok().build();
     }

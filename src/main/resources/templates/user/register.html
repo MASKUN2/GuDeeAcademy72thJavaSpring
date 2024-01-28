@@ -9,15 +9,21 @@
 </head>
 <body>
 <div class="container my-5">
-    <div class="mx-1">
+    <div class="mx-auto">
+        <div class="d-flex justify-content-center">
+            <h1>REGISTER</h1>
+        </div>
         <form th:object="${form}">
             <label class="form-label">아이디</label>
             <input th:field="*{userId}" placeholder="4~30자" class="form-control">
             <label class="form-label">비밀번호</label>
-            <input th:field="*{userPw}" placeholder="4~30자" class="form-control">
+            <input th:field="*{userPw}" placeholder="4~30자" class="form-control" type="password">
             <label class="form-label">비밀번호 확인</label>
-            <input th:field="*{userPwCheck}" placeholder="비밀번호 재입력" class="form-control">
-            <button id="registerBtn" type="button" class="btn btn-light">회원가입</button>
+            <input th:field="*{userPwCheck}" placeholder="비밀번호 재입력" class="form-control" type="password">
+            <div class="d-grid gap-2 my-2">
+                <button id="registerBtn" type="button" class="btn btn-outline-primary">회원가입</button>
+                <a href="/" class="btn btn-outline-secondary">홈으로</a>
+            </div>
         </form>
     </div>
 </div>
@@ -27,22 +33,23 @@
         let userId = $('#userId').val();
         let userPw = $('#userPw').val();
         let userPwCheck = $('#userPwCheck').val();
-        let data = {userId : userId, userPw : userPw, userPwCheck : userPwCheck};
+        let data = {userId: userId, userPw: userPw, userPwCheck: userPwCheck};
         tryRegister(data)
     });
-    function tryRegister(data){
+
+    function tryRegister(data) {
         $.ajax({
             url: '/user/register',
             type: 'post',
             contentType: 'application/json',
             data: JSON.stringify(data)
-        }).done(function (data, textStatus, xhr){
+        }).done(function (data, textStatus, xhr) {
             alert('회원가입이 완료되었습니다. 로그인해주세요');
             window.location.replace('/');
-        }).fail(function (data, textStatus, xhr){
+        }).fail(function (data, textStatus, xhr) {
             console.log(data);
             alert(data.responseJSON.serverMessage);
-        })
+        });
     }
 </script>
 </html>

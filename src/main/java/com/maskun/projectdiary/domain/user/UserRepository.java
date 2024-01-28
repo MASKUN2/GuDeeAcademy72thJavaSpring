@@ -11,4 +11,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,String> {
     @Query("select u from User u where u.userId = :userId and u.userPw = password(:userPw)")
     Optional<User> findUserByUserIdAndUserPw(@Param("userId") String userId,@Param("userPw") String userPw);
+
+    @Query("select password(:rawUserPw)")
+    String getEncodedUserPw(@Param("rawUserPw")String rawUserPw);
 }
