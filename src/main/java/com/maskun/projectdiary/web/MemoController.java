@@ -1,10 +1,16 @@
 package com.maskun.projectdiary.web;
 
+import com.maskun.projectdiary.domain.memo.Memo;
 import com.maskun.projectdiary.domain.user.User;
-import com.maskun.projectdiary.service.MemoService;
+import com.maskun.projectdiary.domain.memo.MemoService;
 import com.maskun.projectdiary.web.dto.MemoSaveDto;
+import com.maskun.projectdiary.web.dto.PageUrl;
+import com.maskun.projectdiary.web.dto.Pagination;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -59,8 +65,16 @@ public class MemoController {
     @GetMapping("/memo")
     public String getMemoList(@SessionAttribute(name = "loginUser")User user,
                               @RequestParam(name = "keyword")String keyword,
+                              @PageableDefault(size = 10) Pageable pageable,
+                              HttpServletRequest request,
                               Model model){
-        model.addAttribute("retrievedMemoList", memoService.retrieveUserMemoByKeyword(user.getUserId(), keyword));
+        //데이터 가져오기
+        Pagination<Memo> memoPagination = memoService.retrieveUserMemoByKeywordPagination(user.getUserId(),keyword, pageable);
+        List<PageUrl> pageUrlList = memoPagination.getPageUrlList(5, request.getRequestURL().toString(), request.getParameterMap());
+        log.debug("생성된 페이지네이션 {}", pageUrlList.toString());
+        model.addAttribute("retrievedMemoList", memoPagination.getContent());
+        model.addAttribute("pageUrlList", pageUrlList);
+        model.addAttribute("keyword", keyword);
         return "memo";
     }
 

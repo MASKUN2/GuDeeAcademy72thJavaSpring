@@ -2,7 +2,7 @@ package com.maskun.projectdiary.memo;
 
 import com.maskun.projectdiary.domain.memo.Memo;
 import com.maskun.projectdiary.domain.memo.MemoRepository;
-import com.maskun.projectdiary.service.MemoService;
+import com.maskun.projectdiary.domain.memo.MemoService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

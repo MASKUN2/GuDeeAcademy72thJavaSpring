@@ -8,9 +8,10 @@
 
 <header th:fragment="navigator" style="background-color: aliceblue" class="p-1 my-3">
     <th:block th:if="${session.loginUser ne null}">
-        <h5 th:text="|${session.loginUser.userId} 로그인되었습니다|"></h5>
+        <h6 th:text="|${session.loginUser.userId} 로그인되었습니다|"></h6>
         <div class="row">
             <div class="col-8">
+                <a th:href="@{/}" class="btn btn-outline-secondary">홈</a>
                 <button type="button" class="btn btn-outline-secondary"
                         onclick="window.location.href = '/user/logout'; alert('로그아웃되었습니다.');" th:text="로그아웃"/>
             </div>
@@ -23,6 +24,7 @@
         </div>
     </th:block>
     <th:block th:if="${session.loginUser eq null}">
+        <a th:href="@{/}" class="btn btn-outline-secondary">홈</a>
         <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
                 data-bs-target="#loginModal" th:text="로그인"/>
         <a th:href="@{/user/register}" class="btn btn-outline-secondary">회원가입</a>
@@ -92,13 +94,13 @@
         }
 
         $('#memoSearchInputForm').keypress(function (key) {
-            //키가 Enter(13)인경우 로그인시도
             if (key.keyCode === 13) {
                 searchUserMemo();
             }
         });
 
         $('#memoSearchBtn').click(searchUserMemo);
+
         function searchUserMemo() {
             let keyword = $('#memoSearchInputForm').val();
             if (keyword.length < 1) {

@@ -1,9 +1,12 @@
-package com.maskun.projectdiary.service;
+package com.maskun.projectdiary.domain.memo;
 
-import com.maskun.projectdiary.domain.memo.Memo;
-import com.maskun.projectdiary.domain.memo.MemoRepository;
 import com.maskun.projectdiary.web.dto.MemoSaveDto;
+import com.maskun.projectdiary.web.dto.Pagination;
+import com.maskun.projectdiary.web.dto.PaginationImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -66,8 +69,10 @@ public class MemoService {
 
     }
 
-    public List<Memo> retrieveUserMemoByKeyword(String userId, String keyword) {
-        return memoRepository.findMemoByUserIdAndMemoContentContains(userId, keyword);
+    public Pagination<Memo> retrieveUserMemoByKeywordPagination(String userId, String keyword, Pageable pageable) {
+        Page<Memo> memoPage = memoRepository.findMemoByUserIdAndMemoContentContainsOrderByCreatedateDesc(userId, keyword, pageable);
+        Pagination<Memo> pagination = PaginationImpl.fromPage(memoPage);
+        return pagination;
     }
 
     /** update 용 요청 객체만 추림. No가 null인 객체는 add 건이거나 garbage이므로 제외
