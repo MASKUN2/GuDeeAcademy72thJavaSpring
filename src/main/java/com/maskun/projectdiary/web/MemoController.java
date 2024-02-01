@@ -7,6 +7,7 @@ import com.maskun.projectdiary.web.dto.MemoSaveDto;
 import com.maskun.projectdiary.web.dto.PageUrl;
 import com.maskun.projectdiary.web.dto.Pagination;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -62,16 +63,30 @@ public class MemoController {
 
     }
 
-    @GetMapping("/memo")
+    /**
+     * @param user
+     * @param keyword
+     * @param pageable 정렬조건 sort를 옵션으로 받을 수 있습니다. 현재버전에선 사용하지 않습니다.
+     * @param request
+     * @param model
+     * @return
+     */
+    @GetMapping("/memo")//메모 검색페이지
     public String getMemoList(@SessionAttribute(name = "loginUser")User user,
-                              @RequestParam(name = "keyword")String keyword,
-                              @PageableDefault(size = 10) Pageable pageable,
+                              @RequestParam(name = "keyword") @NotNull String keyword,
+                              @PageableDefault(size = 10, sort = {}) Pageable pageable,
                               HttpServletRequest request,
                               Model model){
-        //데이터 가져오기
+        //pageable의 sort 입력을 방지
+        if(pageable.getSort().isSorted()){
+            throw new IllegalArgumentException("쿼리스트링 sort는 forbidden 되었습니다.");
+        }
+        //pagination 가져오기
         Pagination<Memo> memoPagination = memoService.retrieveUserMemoByKeywordPagination(user.getUserId(),keyword, pageable);
+        //페이지네이션 정보 생성
         List<PageUrl> pageUrlList = memoPagination.getPageUrlList(5, request.getRequestURL().toString(), request.getParameterMap());
         log.debug("생성된 페이지네이션 {}", pageUrlList.toString());
+
         model.addAttribute("retrievedMemoList", memoPagination.getContent());
         model.addAttribute("pageUrlList", pageUrlList);
         model.addAttribute("keyword", keyword);
