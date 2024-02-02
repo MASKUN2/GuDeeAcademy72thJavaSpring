@@ -65,10 +65,11 @@ public class CalendarService {
     }
 
     private void mapUserMemoToDateVo(YearMonth yearMonth, User user, LinkedHashMap<String, DateVo> dateVoMap) {
-        getMonthMemoListOpt(yearMonth, user).orElse(new ArrayList<>()).forEach(memo->{
-            Optional.ofNullable(dateVoMap.get(memo.getMemoDate().toString()))
+        getMonthMemoListOpt(yearMonth, user).orElse(new ArrayList<>())
+                .forEach(memo->{
+                    Optional.ofNullable(dateVoMap.get(memo.getMemoDate().toString()))
                     .ifPresent(dateVo -> dateVo.addMemoOne(memo));
-        });
+                });
     }
 
     private List<LocalDate> getMonthLocalDateList(YearMonth yearMonth) {

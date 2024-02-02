@@ -20,9 +20,6 @@ public class PaginationImpl<T> extends PageImpl<T> implements Pagination<T> {
         super(content, pageable, total);
     }
 
-    private PaginationImpl(List<T> content) {
-        super(content);
-    }
 
     public static <T>Pagination<T> fromPage(Page<T> page){
         return new PaginationImpl<>(page.getContent(), page.getPageable(), page.getTotalElements());
