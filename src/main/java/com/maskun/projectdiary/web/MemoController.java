@@ -1,5 +1,6 @@
 package com.maskun.projectdiary.web;
 
+import com.maskun.projectdiary.core.exception.MismatchRequestToDbRecordException;
 import com.maskun.projectdiary.domain.memo.Memo;
 import com.maskun.projectdiary.domain.user.User;
 import com.maskun.projectdiary.domain.memo.MemoService;
@@ -57,10 +58,15 @@ public class MemoController {
             return ok().build();
         }
         //요청실행
-        boolean isSuccess = memoService.updateUserDateMemo(user.getUserId(),date, dtoList);
-
-        return isSuccess? ok().build() : internalServerError().body("error");
-
+        try {
+            memoService.updateUserDateMemo(user.getUserId(), date, dtoList);
+            return ok().build();
+        }catch (MismatchRequestToDbRecordException e){
+            return badRequest().body("사용자 정보가 일치하지 않습니다");
+        }catch (Exception e){
+            log.error("메모의 수정업데이트에 실패했습니다.", e);
+            return internalServerError().body("error");
+        }
     }
 
     /**
