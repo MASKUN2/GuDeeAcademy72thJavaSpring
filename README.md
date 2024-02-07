@@ -25,3 +25,4 @@
 - controller를 대부분 RESTApiController로 변경하기
 - 한번 받아온 공공데이터 휴일정보API를 인메모리DB로 저장될 수 있도록 변경하기
 - 권한제어를 Spring security로 변경하기
+- 홈화면을 각 기능에 접근이 쉬운 okky 스타일로 변경하기

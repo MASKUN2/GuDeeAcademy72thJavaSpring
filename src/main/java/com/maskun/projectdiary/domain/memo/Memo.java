@@ -1,9 +1,6 @@
 package com.maskun.projectdiary.domain.memo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -20,6 +17,7 @@ public class Memo {
     private LocalDate memoDate;
     private String memoContent;
     private LocalDateTime createdate;
+    private Boolean isTracking;
 
     public void updateContent(String content){
         this.memoContent = content;
