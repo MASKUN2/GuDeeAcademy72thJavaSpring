@@ -70,7 +70,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="memoViewAddBtn" class="btn" onclick="addEmptyMemoInView()">메모추가</button>
-                    <button type="button" id="memoViewSaveBtn" class="btn btn-primary" onclick="saveMemoInView()">수정
+                    <button type="button" id="memoViewSaveBtn" class="btn btn-primary" onclick="updateMemoListInView()">수정
                     </button>
                 </div>
             </div>
@@ -117,7 +117,7 @@
     }
 
     // 메모뷰 저장
-    function saveMemoInView(date) {
+    function updateMemoListInView(date) {
         let memoListInView = [];
         let inputTags = memoViewBody.find('input');
         inputTags.each(function (index, item) {
@@ -131,22 +131,22 @@
         });
         console.log(memoListInView);
 
-        memoSaveRequest(date, memoListInView);
+        requestUpdateDateMemoList(date, memoListInView);
     }
 
     // 메모 수정 ajax
-    function memoSaveRequest(date, memoList) {
+    function requestUpdateDateMemoList(date, memoList) {
         $.ajax({
             url: '/api/v1/memo/' + date,
-            type: 'post',
+            type: 'PUT',
             contentType: 'application/json',
             data: JSON.stringify(memoList),
             success: function () {
-                alert('메모가 수정되었습니다')
+                alert('해당일정의 메모가 수정되었습니다')
                 window.location.reload();
             },
             error: function () {
-                alert('메모 수정 실패')
+                alert('수정 실패')
             }
         });
     }

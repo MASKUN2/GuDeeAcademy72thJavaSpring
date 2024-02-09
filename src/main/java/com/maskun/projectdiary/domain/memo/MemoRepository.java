@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface MemoRepository extends JpaRepository<Memo,Long> {
-    List<Memo> findByMemoDate(LocalDate date);
+    List<Memo> findByUserIdAndMemoDate(String userId, LocalDate memoDate);
 
     List<Memo> findByMemoDateBetweenAndUserId(LocalDate memoDate, LocalDate memoDate2, String userId);
 
@@ -24,5 +24,5 @@ public interface MemoRepository extends JpaRepository<Memo,Long> {
 
     Page<Memo> findMemoByUserIdAndMemoContentContainsOrderByCreatedateDesc(String userId, String keyword, Pageable pageable);
 
-
+    void deleteAllByUserIdAndMemoDate(String userId, LocalDate memoDate);
 }

@@ -7,4 +7,12 @@ public class MismatchRequestToDbRecordException extends RuntimeException{
 
     public MismatchRequestToDbRecordException() {
     }
+
+    public MismatchRequestToDbRecordException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public MismatchRequestToDbRecordException(Throwable cause) {
+        super(cause);
+    }
 }
