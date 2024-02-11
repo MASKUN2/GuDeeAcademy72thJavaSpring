@@ -4,7 +4,7 @@ import com.maskun.projectdiary.core.exception.MismatchRequestToDbRecordException
 import com.maskun.projectdiary.domain.memo.Memo;
 import com.maskun.projectdiary.domain.memo.MemoService;
 import com.maskun.projectdiary.domain.user.User;
-import com.maskun.projectdiary.web.dto.MemoPutReqDto;
+import com.maskun.projectdiary.domain.memo.MemoPutReqDto;
 import com.maskun.projectdiary.web.dto.PageUrl;
 import com.maskun.projectdiary.web.dto.Pagination;
 import jakarta.servlet.http.HttpServletRequest;

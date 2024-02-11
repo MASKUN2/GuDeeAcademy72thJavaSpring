@@ -2,7 +2,6 @@ package com.maskun.projectdiary.domain.memo;
 
 import com.maskun.projectdiary.core.exception.DeleteFailureException;
 import com.maskun.projectdiary.core.exception.MismatchRequestToDbRecordException;
-import com.maskun.projectdiary.web.dto.MemoPutReqDto;
 import com.maskun.projectdiary.web.dto.Pagination;
 import com.maskun.projectdiary.web.dto.PaginationImpl;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -45,16 +43,24 @@ public class MemoServiceImpl implements MemoService{
     @Transactional
     public void updateUserDateMemoList(String userId, LocalDate date, List<MemoPutReqDto> reqUserDateMemoList)throws MismatchRequestToDbRecordException{
         //가비지 메모를 제거하기
-        reqUserDateMemoList.removeIf(memoPutReqDto -> !StringUtils.hasText(memoPutReqDto.memoContent())&&Objects.isNull(memoPutReqDto.memoNo()));
+        reqUserDateMemoList.removeIf(MemoPutReqDto::IsReqTypeIgnore);
         //전체 삭제인지 확인하고 맞으면 삭제하기
-        if(reqUserDateMemoList.isEmpty()){
+        boolean isCleanUpDateMemos = reqUserDateMemoList.isEmpty();
+        if(isCleanUpDateMemos){
             deleteAllMemoByUserIdAndDate(userId, date);
             return;
         }
-        
-        //일부삭제인 경우 아래로
-        //삭제/수정/추가할 메모를 구별하기
+
+        //구분
+        //수정(식별자와 내용 둘다 있음)
+        //추가(식별자가 없고 내용만 있음)할 메모를 구별하기
+
         //일부를 삭제하기
+        List<Long> notDeleteMomoNoList = reqUserDateMemoList.stream()
+                .map(MemoPutReqDto::memoNo)
+                .filter(Objects::nonNull)
+                .distinct().toList();
+        memoRepository.deleteMemosByMemoNoNotIn(notDeleteMomoNoList);
         //수정할 데이터의 일관성 확인하기
         //수정하기
         //추가하기
@@ -120,7 +126,7 @@ public class MemoServiceImpl implements MemoService{
      * @param reqMemoList
      * @return
      */
-    private static List<MemoPutReqDto> filterNeedToUpdate(List<MemoPutReqDto> reqMemoList) {
+    private List<MemoPutReqDto> filterNeedToUpdate(List<MemoPutReqDto> reqMemoList) {
         return reqMemoList.stream()
                 .filter(m -> m.memoNo() != null)
                 .toList();

@@ -1,7 +1,6 @@
 package com.maskun.projectdiary.domain.memo;
 
 import com.maskun.projectdiary.core.exception.MismatchRequestToDbRecordException;
-import com.maskun.projectdiary.web.dto.MemoPutReqDto;
 import com.maskun.projectdiary.web.dto.Pagination;
 import org.springframework.data.domain.Pageable;
 

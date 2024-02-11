@@ -25,4 +25,7 @@ public interface MemoRepository extends JpaRepository<Memo,Long> {
     Page<Memo> findMemoByUserIdAndMemoContentContainsOrderByCreatedateDesc(String userId, String keyword, Pageable pageable);
 
     void deleteAllByUserIdAndMemoDate(String userId, LocalDate memoDate);
+
+    void deleteMemosByMemoNoNotIn(List<Long> MemoNo);
+
 }
