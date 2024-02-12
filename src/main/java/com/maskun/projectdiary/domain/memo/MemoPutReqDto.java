@@ -1,41 +1,49 @@
 package com.maskun.projectdiary.domain.memo;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.springframework.util.StringUtils;
 
-public record MemoPutReqDto(Long memoNo, String memoContent, CUDI requestType){
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+public class MemoPutReqDto{
+    @Getter
+    private final Long memoNo;
+    @Getter(AccessLevel.PACKAGE)
+    private final String memoContent;
+    @Getter(AccessLevel.NONE)
+    private final RequestType requestType;
 
     public MemoPutReqDto(Long memoNo, String memoContent) {
-        this(memoNo, memoContent, classifyRequestType(memoNo, memoContent));
+        this.memoNo = memoNo;
+        this.memoContent = memoContent;
+        this.requestType = classifyRequestType(memoNo, memoContent);
     }
-
-    boolean IsReqTypeCreate(){
-        return this.requestType == CUDI.CREATE;
+    Memo toEntityForInsert(String userId, LocalDate date){
+        return new Memo(userId, date, memoContent, LocalDateTime.now());
     }
-    boolean IsReqTypeUpdate(){
-        return this.requestType == CUDI.UPDATE;
+    boolean IsReqTypeInsert(){
+        return this.requestType == RequestType.INSERT;
     }
-    boolean IsReqTypeDelete(){
-        return this.requestType == CUDI.DELETE;
+    boolean IsReqTypeRemainAndUpdate(){
+        return this.requestType == RequestType.REMAIN_AND_UPDATE;
     }
     boolean IsReqTypeIgnore(){
-        return this.requestType == CUDI.IGNORE;
+        return this.requestType == RequestType.IGNORE;
     }
 
-    private enum CUDI {
-        CREATE,
-        UPDATE,
-        DELETE,
+    private enum RequestType {
+        INSERT,
+        REMAIN_AND_UPDATE,
         IGNORE
     }
-
-    private static CUDI classifyRequestType(Long memoNo, String memoContent){
+    private static RequestType classifyRequestType(Long memoNo, String memoContent){
         boolean memoNoIsNull = memoNo == null;
         boolean memoContentHasText = StringUtils.hasText(memoContent);
-
         if(memoNoIsNull){
-            return memoContentHasText? CUDI.CREATE : CUDI.IGNORE ;
-        }else {
-            return memoContentHasText? CUDI.UPDATE : CUDI.DELETE ;
+            return memoContentHasText? RequestType.INSERT : RequestType.IGNORE ;
         }
+        return memoContentHasText? RequestType.REMAIN_AND_UPDATE : RequestType.IGNORE;
     }
 }

@@ -92,7 +92,7 @@
                 memoViewBody.text(date);
                 memoViewBody.html("");
                 $(response).each(printMemos);
-                $('#memoViewSaveBtn').attr('onclick', 'saveMemoInView(\'' + date + '\')');
+                $('#memoViewSaveBtn').attr('onclick', 'updateMemoListInView(\'' + date + '\')');
             }
         })
     }

@@ -1,0 +1,45 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+title Memo API 설계 Put Memo
+
+start
+:/api/v1/memo/{date} \n PUT;
+if (로그인 여부) then (비정상)
+ -> 401 error;
+    end
+endif
+#green: 트랜젝션 시작;
+: 쓰레기 메모(식별자 없고 content가 Empty)를 버림;
+if (요청이 전체삭제인가?)
+    ->맞음;
+    if(해당일자의 메모가 이미 없는가?) then (맞음)
+    else
+    -> 아님;
+    :해당일정 메모를 삭제해서 비움;
+    endif
+else
+    -> 아님;
+    #orange: 메모의 (수정하고 남김) / (추가) 구분;
+    note
+        메모의 작업 분류를
+        - RemainAndUpdate
+        - Insert
+       로 구분하고 나머지는
+       해당 일정에서 삭제대상
+       (Delete Others)
+    end note
+    group RemainAndUpdate , Delete Others
+    : 해당일자의 유저 메모List 가져옴;
+    if (수정요청메모의 DB일관성 검증) then
+        -> 400 error;
+        end
+    endif
+    : 일부 메모 수정하고 유지시킴\n(RemainAndUpdate);
+    : 수정하지 않은 나머지 메모 삭제\n (Delete Others);
+    end group
+    : 메모 추가(Insert);
+endif
+#green: 트랜젝션 종료;
+-> 200 OK;
+stop
+@enduml

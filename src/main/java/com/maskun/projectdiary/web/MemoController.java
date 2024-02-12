@@ -1,10 +1,9 @@
 package com.maskun.projectdiary.web;
 
-import com.maskun.projectdiary.core.exception.MismatchRequestToDbRecordException;
 import com.maskun.projectdiary.domain.memo.Memo;
+import com.maskun.projectdiary.domain.memo.MemoPutReqDto;
 import com.maskun.projectdiary.domain.memo.MemoService;
 import com.maskun.projectdiary.domain.user.User;
-import com.maskun.projectdiary.domain.memo.MemoPutReqDto;
 import com.maskun.projectdiary.web.dto.PageUrl;
 import com.maskun.projectdiary.web.dto.Pagination;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,11 +43,10 @@ public class MemoController {
 
     @ResponseBody
     @PutMapping("/api/v1/memo/{date}")
-    public ResponseEntity<Object> saveDateMemo(@PathVariable(name = "date")LocalDate date,
-                                               @RequestBody(required = false) List<MemoPutReqDto> dtoList,
-                                               @SessionAttribute(name = "loginUser", required = false)User user){
+    public ResponseEntity<Object> updateDateMemos(@PathVariable(name = "date")LocalDate date,
+                                                 @RequestBody(required = false) List<MemoPutReqDto> dtoList,
+                                                 @SessionAttribute(name = "loginUser", required = false)User user){
         log.debug(dtoList.toString());
-
         //로그인 확인
         if(user == null){
             return status(HttpStatus.UNAUTHORIZED).build();
@@ -57,8 +55,8 @@ public class MemoController {
         try {
             memoService.updateUserDateMemoList(user.getUserId(), date, dtoList);
             return ok().build();
-        }catch (MismatchRequestToDbRecordException e){
-            return badRequest().body("사용자 정보가 일치하지 않습니다");
+        }catch (IllegalArgumentException e){
+            return badRequest().build();
         }catch (Exception e){
             log.error("메모의 수정업데이트에 실패했습니다.", e);
             return internalServerError().body("error");

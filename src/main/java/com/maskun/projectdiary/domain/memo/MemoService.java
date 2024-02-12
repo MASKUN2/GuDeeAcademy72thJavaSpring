@@ -11,7 +11,7 @@ public interface MemoService {
 
     List<Memo> findUserMemoListByDate(String userId, LocalDate date);
 
-    void updateUserDateMemoList(String userId, LocalDate date, List<MemoPutReqDto> reqMemoList)throws MismatchRequestToDbRecordException;
+    void updateUserDateMemoList(String userId, LocalDate date, List<MemoPutReqDto> reqMemoList)throws IllegalArgumentException;
 
     Pagination<Memo> retrieveUserMemoByKeywordPagination(String userId, String keyword, Pageable pageable);
 }

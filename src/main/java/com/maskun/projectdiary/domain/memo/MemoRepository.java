@@ -26,6 +26,6 @@ public interface MemoRepository extends JpaRepository<Memo,Long> {
 
     void deleteAllByUserIdAndMemoDate(String userId, LocalDate memoDate);
 
-    void deleteMemosByMemoNoNotIn(List<Long> MemoNo);
+    void deleteMemosByMemoNoIn(List<Long> MemoNo);
 
 }
