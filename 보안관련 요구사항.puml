@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+@startuml
+title 보안 요구사항
+
+object configuration{
+    폼 로그인 방식
+
+}
+
+map 요청 {
+}
+map 인증필터 {
+ csrf => 레디스 기반 csrf repository
+}
+map 보안컨텍스트 {
+ Authentication =>
+}
+map 인증관리자 {
+ support => UsernamePasswordAuthenticationToken
+ }
+map 인증공급자 {
+}
+map 사용자세부정보서비스 {
+    방식 => DB / JPA
+}
+
+map 암호인코더 {
+    방식 => Delegating
+    알고리즘 => BCrypt
+}
+
+요청 --> 인증필터
+인증필터 --> 보안컨텍스트
+보안컨텍스트 --> 인증필터
+인증필터 --> 인증관리자
+인증관리자 --> 인증필터
+인증관리자 --> 인증공급자
+인증공급자 --> 인증관리자
+인증공급자 .. 사용자세부정보서비스
+인증공급자 .. 암호인코더
+@enduml
+
